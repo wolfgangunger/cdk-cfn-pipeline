@@ -60,12 +60,14 @@ config = app.node.try_get_context("config")
 accounts = config.get("accounts")
 
 branch_name = "main"
+branch_name_cfn = "main"
 #pipeline_template = "feature-branch-pipeline-template"
 pipeline_template = "cfn-deploy-pipeline-template"
 PipelineGeneratorStack(
     app,
     "cfn-deploy--pipeline-generator",
     branch_name=branch_name,
+    branch_name_cfn=branch_name_cfn,
     pipeline_template=pipeline_template,
     branch_prefix="^(feature|bug|hotfix)/",
     cfn_pipeline_suffix="-CFN-Pipeline",

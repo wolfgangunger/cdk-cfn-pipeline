@@ -4,10 +4,14 @@ from aws_cdk import (
     aws_iam as iam,
     pipelines,
     aws_codebuild,
-    Duration,
+    CfnCapabilities
 )
 from aws_cdk.aws_codebuild import BuildEnvironment
 from aws_cdk.pipelines import CodePipeline
+import aws_cdk.aws_codepipeline_actions as cpactions
+import aws_cdk.aws_codepipeline as codepipeline
+#import aws_cdk.CfnCapabilities
+
 
 from infrastructure.cicd.app_deploy import AppDeploy
 
@@ -32,7 +36,7 @@ class CfnPipelineStack(Stack):
         prod_account: str = accounts["prod"]["account"]
         codestar_connection_arn = config.get("connection_arn")
         repo_owner = config.get("owner")
-        repo = config.get("repo")
+        repo = config.get("repo_cfn")
 
         synth_dev_account_role_arn = (
             f"arn:aws:iam::{dev_account}:role/codebuild-role-from-toolchain-account"
@@ -58,9 +62,7 @@ class CfnPipelineStack(Stack):
         pipeline = CodePipeline(
             self,
             id,
-            #
-            pipeline_name=id,   
-            #            
+            pipeline_name=id,           
             synth=synth_step,
             cross_account_keys=True,
             code_build_defaults=pipelines.CodeBuildOptions(
@@ -71,53 +73,73 @@ class CfnPipelineStack(Stack):
             ),
         )
 
-
-
-
-
-        if development_pipeline:
-  
-
-            # Dev deploy
-            dev_app = AppDeploy(
+        source_output = codepipeline.Artifact("SourceArtifact")
+        # stack_name = "template-005"
+        # cfn_deploy = {
+        #     "stage_name": "Deploy",
+        #     "actions": [
+        #         cpactions.CloudFormationCreateUpdateStackAction(
+        #             action_name="Deploy_CFN_Template",
+        #             stack_name=stack_name,
+        #             #change_set_name=change_set_name,
+        #             admin_permissions=True,
+        #             template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
+        #             template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
+        #             run_order=1
+        #             #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
+        #             #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
+        #             #cfn_capabilities=cfn_capabilities
+                    
+        #         )
+        #     ]
+        # }  
+        # cfn_stage = pipeline.add_stage(cfn_deploy)
+        dev_app = AppDeploy(
                 self,
                 "dev",
+                source_output,
                 config=config,
                 env={
                     "account": dev_account,
                     "region": region,
                 },
-            )
-            ## deploy dev stack
-            dev_stage = pipeline.add_stage(dev_app)
-
-
-            ## QA deploy
-            qa_app = AppDeploy(
-                self,
-                "qa",
-                config=config,
-                env={
-                    "account": qa_account,
-                    "region": region,
-                },
-            )
-            qa_stage = pipeline.add_stage(qa_app)
-
-        else:
-
-
-            # Deploy Prod
-            prod_app = AppDeploy(
-                self,
-                "prod",
-                config=config,
-                env={
-                    "account": prod_account,
-                    "region": region,
-                },
-            )
-            prod_stage = pipeline.add_stage(prod_app)
+        )
+        # if development_pipeline:
+        #     # Dev deploy
+        #     dev_app = AppDeploy(
+        #         self,
+        #         "dev",
+        #         config=config,
+        #         env={
+        #             "account": dev_account,
+        #             "region": region,
+        #         },
+        #     )
+        #     ## deploy dev stack
+        #     dev_stage = pipeline.add_stage(dev_app)
+        #     ## QA deploy
+        #     qa_app = AppDeploy(
+        #         self,
+        #         "qa",
+        #         config=config,
+        #         env={
+        #             "account": qa_account,
+        #             "region": region,
+        #         },
+        #     )
+        #     qa_stage = pipeline.add_stage(qa_app)
+        # else:
+        #     # Deploy Prod
+        #     prod_app = AppDeploy(
+        #         self,
+        #         "prod",
+        #         config=config,
+        #         env={
+        #             "account": prod_account,
+        #             "region": region,
+        #         },
+        #     )
+        #     prod_stage = pipeline.add_stage(prod_app)
 
    
     def get_connection(

@@ -28,16 +28,7 @@ class PipelineGeneratorApplication(Stage):
     ):
         super().__init__(scope, id, **kwargs)
 
-        # the api and lamnda
-        #GithubWebhookAPIStack(
-        #    self,
-        #    "gitHub-webhook-api",
-        #    pipeline_template=pipeline_template,
-        #    branch_prefix=branch_prefix,
-        #    cfn_pipeline_suffix=cfn_pipeline_suffix,
-        #    config=config,
-        #    synthesizer=DefaultStackSynthesizer(),
-        #)
+
         # a template pipeline for each cloudformation template
         CfnPipelineStack(
             self,
@@ -57,6 +48,7 @@ class PipelineGeneratorStack(Stack):
         scope: Construct,
         id: str,
         branch_name: str,
+        branch_name_cfn: str,
         pipeline_template: str,
         branch_prefix: str,
         cfn_pipeline_suffix: str,
@@ -86,16 +78,25 @@ class PipelineGeneratorStack(Stack):
         codestar_connection_arn = config.get("connection_arn")
         repo_owner = config.get("owner")
         repo = config.get("repo")
+        repo_cfn = config.get("repo_cfn")
 
         source_artifact = codepipeline.Artifact()
         cloud_assembly_artifact = codepipeline.Artifact()
 
-        # creating the pipline with  synch action
+        # git input for the generator pipeline itself, the cdk repo
         git_input = pipelines.CodePipelineSource.connection(
             repo_string=f"{repo_owner}/{repo}",
             branch=branch_name,
             connection_arn=codestar_connection_arn,
         )
+        # git input for the cfn repo 
+        git_input_cfn = pipelines.CodePipelineSource.connection(
+            repo_string=f"{repo_owner}/{repo_cfn}",
+            branch=branch_name_cfn,
+            connection_arn=codestar_connection_arn,
+        )
+
+       # creating the pipline with  synch action
         synth_step = self.get_sync_step(
             git_input,
             synth_dev_account_role_arn,
