@@ -94,7 +94,8 @@ class PipelineGeneratorStack(Stack):
         codestar_connection_arn = config.get("connection_arn")
         repo_owner = config.get("owner")
         repo = config.get("repo")
-        repo_cfn = config.get("repo_cfn")
+        #repo_cfn = config.get("repo_cfn")
+        repo_cfn = "sam-cfn-pipeline-test"
 
         source_artifact = codepipeline.Artifact()
         cloud_assembly_artifact = codepipeline.Artifact()
