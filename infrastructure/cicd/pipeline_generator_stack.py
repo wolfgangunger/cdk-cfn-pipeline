@@ -52,6 +52,7 @@ class PipelineGeneratorApplication(Stage):
     ):
         super().__init__(scope, id, **kwargs)
         print("Stage")
+        #create pipelines for each cfn folder
 
 
 
@@ -145,20 +146,29 @@ class PipelineGeneratorStack(Stack):
             },
         )
         dev_bootstrap_stage = pipeline.add_stage(pipeline_generator_bootstrap_stage)
+
+        # action for listing the cfn folders in cfn repo
         list_repo = self.list_repo(
                 git_input
             )
         if list_repo != None:
                 dev_bootstrap_stage.add_post(list_repo)
 
+        # action for listing the cfn folders in cfn repo
         cfn_repo_step = self.get_cfn_repos_step(
             git_input_cfn,
             synth_dev_account_role_arn,
             branch_name,
         )
         wave = pipeline.add_wave("CFN_List_Repo", post=[cfn_repo_step])
-        #wave.add_stage(cfn_repo_step)
 
+       # action for creating the pipelines
+        create_cfn_pipelines_step = self.create_cfn_pipelines_step(
+            git_input_cfn,
+            synth_dev_account_role_arn,
+            branch_name,
+        )
+        wave = pipeline.add_wave("Create_Cfn_Pipelines", post=[create_cfn_pipelines_step])
 
 
         # pipeline_generator_stage = PipelineGeneratorApplication(
@@ -212,7 +222,7 @@ class PipelineGeneratorStack(Stack):
             "echo branch: $BRANCH; cdk synth -c branch_name=$BRANCH",
         ]
         return commands
-    
+    ###
     def get_cfn_repos_step(
         self,
         git_input,
@@ -244,6 +254,39 @@ class PipelineGeneratorStack(Stack):
             "set -e;REPOS=$(python infrastructure/scripts/list_repo.py)"
         ]
         return commands
+    
+    ###
+    def create_cfn_pipelines_step(
+        self,
+        git_input,
+        synth_dev_account_role_arn,
+        branch_name,
+    ):
+        cfn_repo_step = pipelines.CodeBuildStep(
+            "Synth",
+            input=git_input,
+            commands=self.create_cfn_pipelines_step_commands(),
+            env={"BRANCH": branch_name},
+            role_policy_statements=[
+                aws_iam.PolicyStatement(
+                    actions=["sts:AssumeRole"],
+                    effect=aws_iam.Effect.ALLOW,
+                    resources=[
+                        synth_dev_account_role_arn,
+                    ],
+                ),
+            ],
+        )
+        return cfn_repo_step
+    
+    def create_cfn_pipelines_step_commands(self) -> list:
+        commands = [
+            "pwd",
+            "ls",
+            "python infrastructure/scripts/create_pipelines.py",
+            "set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
+        ]
+        return commands    
     ###
     def list_repo(self, git_input):
         infrastructure_unit_tests = pipelines.CodeBuildStep(
