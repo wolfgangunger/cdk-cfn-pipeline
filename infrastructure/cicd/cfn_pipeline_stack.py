@@ -183,7 +183,7 @@ class CfnPipelineStack(Stack):
 
     def get_synth_step_commands(self) -> list:
         commands = [
-            "pws",
+            "pwd",
         ]
         return commands
 

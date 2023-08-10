@@ -263,7 +263,7 @@ class PipelineGeneratorStack(Stack):
         branch_name,
     ):
         cfn_repo_step = pipelines.CodeBuildStep(
-            "Synth",
+            "Create CFN Pipelines",
             input=git_input,
             commands=self.create_cfn_pipelines_step_commands(),
             env={"BRANCH": branch_name},
