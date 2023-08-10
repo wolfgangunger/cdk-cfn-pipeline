@@ -26,7 +26,6 @@ class PipelineGeneratorApplicationBootstrap(Stage):
             **kwargs):
         super().__init__(scope, id, **kwargs)
 
-        # example stack which should be deployed on bootstap before the others deployments of stackss
  
         # a template pipeline for each cloudformation template
         CfnPipelineStack(
@@ -94,8 +93,8 @@ class PipelineGeneratorStack(Stack):
         codestar_connection_arn = config.get("connection_arn")
         repo_owner = config.get("owner")
         repo = config.get("repo")
-        #repo_cfn = config.get("repo_cfn")
-        repo_cfn = "sam-cfn-pipeline-test"
+        repo_cfn = config.get("repo_cfn")
+        #repo_cfn = "sam-cfn-pipeline-test"
 
         source_artifact = codepipeline.Artifact()
         cloud_assembly_artifact = codepipeline.Artifact()
@@ -149,19 +148,19 @@ class PipelineGeneratorStack(Stack):
         dev_bootstrap_stage = pipeline.add_stage(pipeline_generator_bootstrap_stage)
 
         # action for listing the cfn folders in cfn repo
-        list_repo = self.list_repo(
-                git_input
-            )
-        if list_repo != None:
-                dev_bootstrap_stage.add_post(list_repo)
+        # list_repo = self.list_repo(
+        #         git_input
+        #     )
+        # if list_repo != None:
+        #         dev_bootstrap_stage.add_post(list_repo)
 
         # action for listing the cfn folders in cfn repo
-        cfn_repo_step = self.get_cfn_repos_step(
-            git_input_cfn,
-            synth_dev_account_role_arn,
-            branch_name,
-        )
-        wave = pipeline.add_wave("CFN_List_Repo", post=[cfn_repo_step])
+        # cfn_repo_step = self.get_cfn_repos_step(
+        #     git_input_cfn,
+        #     synth_dev_account_role_arn,
+        #     branch_name,
+        # )
+        # wave = pipeline.add_wave("CFN_List_Repo", post=[cfn_repo_step])
 
        # action for creating the pipelines
         create_cfn_pipelines_step = self.create_cfn_pipelines_step(

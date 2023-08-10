@@ -183,9 +183,7 @@ class CfnPipelineStack(Stack):
 
     def get_synth_step_commands(self) -> list:
         commands = [
-            "npm install -g aws-cdk",
-            "python -m pip install -r requirements.txt",
-            "cdk list && cdk synth",
+            "pws",
         ]
         return commands
 
