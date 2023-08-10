@@ -223,37 +223,37 @@ class PipelineGeneratorStack(Stack):
         ]
         return commands
     ###
-    def get_cfn_repos_step(
-        self,
-        git_input,
-        synth_dev_account_role_arn,
-        branch_name,
-    ):
-        cfn_repo_step = pipelines.CodeBuildStep(
-            "Synth",
-            input=git_input,
-            commands=self.get_sync_step_commands(),
-            env={"BRANCH": branch_name},
-            role_policy_statements=[
-                aws_iam.PolicyStatement(
-                    actions=["sts:AssumeRole"],
-                    effect=aws_iam.Effect.ALLOW,
-                    resources=[
-                        synth_dev_account_role_arn,
-                    ],
-                ),
-            ],
-        )
-        return cfn_repo_step
+    # def get_cfn_repos_step(
+    #     self,
+    #     git_input,
+    #     synth_dev_account_role_arn,
+    #     branch_name,
+    # ):
+    #     cfn_repo_step = pipelines.CodeBuildStep(
+    #         "Synth",
+    #         input=git_input,
+    #         commands=self.get_sync_step_commands(),
+    #         env={"BRANCH": branch_name},
+    #         role_policy_statements=[
+    #             aws_iam.PolicyStatement(
+    #                 actions=["sts:AssumeRole"],
+    #                 effect=aws_iam.Effect.ALLOW,
+    #                 resources=[
+    #                     synth_dev_account_role_arn,
+    #                 ],
+    #             ),
+    #         ],
+    #     )
+    #     return cfn_repo_step
     
-    def get_cfn_repos_step_commands(self) -> list:
-        commands = [
-            "pwd",
-            "ls",
-            "python infrastructure/scripts/list_repo.py",
-            "set -e;REPOS=$(python infrastructure/scripts/list_repo.py)"
-        ]
-        return commands
+    # def get_cfn_repos_step_commands(self) -> list:
+    #     commands = [
+    #         "pwd",
+    #         "ls",
+    #         "python infrastructure/scripts/list_repo.py",
+    #         "set -e;REPOS=$(python infrastructure/scripts/list_repo.py)"
+    #     ]
+    #     return commands
     
     ###
     def create_cfn_pipelines_step(
