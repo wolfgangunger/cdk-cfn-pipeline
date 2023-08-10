@@ -1,0 +1,14 @@
+aws-cdk-lib==2.21.1
+constructs>=10.0.0,<11.0.0
+
+aws_cdk.aws_lambda_python_alpha==2.21.1a0
+
+attrs==21.2.0
+
+cattrs==1.8.0
+jsii==1.57.0
+boto3~=1.17.73
+botocore~=1.20.73
+requests
+aws_requests_auth
+aws_secretsmanager

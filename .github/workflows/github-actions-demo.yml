@@ -1,0 +1,33 @@
+name: GitHub Actions CodePipeline
+run-name: ${{ github.actor }} action for codepipeline 🚀
+#on: [push]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bug/**' 
+      - 'hotfix/**'  
+  pull_request:
+      types: [closed]            
+  delete:
+  
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: echo "🍏 head_Ref ${{github.head_ref }}."    
+      - run: echo "🍏 Commit Message ${{github.event.head_commit.message}}."         
+      - run: echo "🍏 github.event.pull_request.base.ref ${{github.event.pull_request.base.ref }}."                   
+      - name: Webhook
+        uses: distributhor/workflow-webhook@v3
+        env: 
+          # edit the url for your api gateway stage url or custom domain
+          webhook_url: "https://xxx.execute-api.eu-west-1.amazonaws.com/prod/webhook"
+          data: '{ "repository": "${{github.event.repository.full_name}}", "ref": "${{github.ref_name}}", "ref_head": "${{github.head_ref}}", "ref_type": "branch", "description": "${{ github.event.head_commit.message }}" }'
+           
+              
