@@ -10,9 +10,6 @@ from aws_cdk.aws_codebuild import BuildEnvironment
 from aws_cdk.pipelines import CodePipeline
 import aws_cdk.aws_codepipeline_actions as cpactions
 import aws_cdk.aws_codepipeline as codepipeline
-#import aws_cdk.CfnCapabilities
-
-
 from infrastructure.cicd.app_deploy import AppDeploy
 
 

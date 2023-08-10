@@ -15,6 +15,30 @@ from aws_cdk.pipelines import CodePipeline
 from infrastructure.api.github_webhook_api_stack import GithubWebhookAPIStack
 from infrastructure.cicd.cfn_pipeline_stack import CfnPipelineStack
 
+
+class PipelineGeneratorApplicationBootstrap(Stage):
+    def __init__(
+            self, 
+            scope: Construct, 
+            id: str, 
+            pipeline_template: str,
+            config: dict = None, 
+            **kwargs):
+        super().__init__(scope, id, **kwargs)
+
+        # example stack which should be deployed on bootstap before the others deployments of stackss
+ 
+        # a template pipeline for each cloudformation template
+        CfnPipelineStack(
+            self,
+            pipeline_template,
+            development_pipeline=True,
+            #feature_branch_name="not_exist_branch_to_avoid_running",
+            #cfn_pipeline_suffix=cfn_pipeline_suffix,
+            config={**config},
+            synthesizer=DefaultStackSynthesizer(),
+        )
+
 class PipelineGeneratorApplication(Stage):
     def __init__(
         self,
@@ -27,18 +51,9 @@ class PipelineGeneratorApplication(Stage):
         **kwargs,
     ):
         super().__init__(scope, id, **kwargs)
+        print("Stage")
 
 
-        # a template pipeline for each cloudformation template
-        CfnPipelineStack(
-            self,
-            pipeline_template,
-            development_pipeline=True,
-            #feature_branch_name="not_exist_branch_to_avoid_running",
-            #cfn_pipeline_suffix=cfn_pipeline_suffix,
-            config={**config},
-            synthesizer=DefaultStackSynthesizer(),
-        )
 
 
 
@@ -119,26 +134,49 @@ class PipelineGeneratorStack(Stack):
             ),
         )
 
-        pipeline_generator_stage = PipelineGeneratorApplication(
+        pipeline_generator_bootstrap_stage = PipelineGeneratorApplicationBootstrap(
             self,
-            "pipeline-generator",
+            "pipeline-generator-bootstrap-stage",
             pipeline_template=pipeline_template,
-            branch_prefix=branch_prefix,
-            cfn_pipeline_suffix=cfn_pipeline_suffix,
             config=config,
             env={
                 "account": toolchain_account,
                 "region": region,
             },
         )
-        dev_stage = pipeline.add_stage(pipeline_generator_stage)
+        dev_bootstrap_stage = pipeline.add_stage(pipeline_generator_bootstrap_stage)
         list_repo = self.list_repo(
                 git_input
             )
         if list_repo != None:
-                dev_stage.add_post(list_repo)
+                dev_bootstrap_stage.add_post(list_repo)
 
-    ########## methods to be overwritten in subclass
+        cfn_repo_step = self.get_cfn_repos_step(
+            git_input_cfn,
+            synth_dev_account_role_arn,
+            branch_name,
+        )
+        wave = pipeline.add_wave("CFN_List_Repo", post=[cfn_repo_step])
+        #wave.add_stage(cfn_repo_step)
+
+
+
+        # pipeline_generator_stage = PipelineGeneratorApplication(
+        #     self,
+        #     "pipeline-generator-stage",
+        #     pipeline_template=pipeline_template,
+        #     branch_prefix=branch_prefix,
+        #     cfn_pipeline_suffix=cfn_pipeline_suffix,
+        #     config=config,
+        #     env={
+        #         "account": toolchain_account,
+        #         "region": region,
+        #     },
+        # )
+        # dev_stage = pipeline.add_stage(pipeline_generator_stage)
+
+
+
     def get_sync_step(
         self,
         git_input,
@@ -175,6 +213,38 @@ class PipelineGeneratorStack(Stack):
         ]
         return commands
     
+    def get_cfn_repos_step(
+        self,
+        git_input,
+        synth_dev_account_role_arn,
+        branch_name,
+    ):
+        cfn_repo_step = pipelines.CodeBuildStep(
+            "Synth",
+            input=git_input,
+            commands=self.get_sync_step_commands(),
+            env={"BRANCH": branch_name},
+            role_policy_statements=[
+                aws_iam.PolicyStatement(
+                    actions=["sts:AssumeRole"],
+                    effect=aws_iam.Effect.ALLOW,
+                    resources=[
+                        synth_dev_account_role_arn,
+                    ],
+                ),
+            ],
+        )
+        return cfn_repo_step
+    
+    def get_cfn_repos_step_commands(self) -> list:
+        commands = [
+            "pwd",
+            "ls",
+            "python infrastructure/scripts/list_repo.py",
+            "set -e;REPOS=$(python infrastructure/scripts/list_repo.py)"
+        ]
+        return commands
+    ###
     def list_repo(self, git_input):
         infrastructure_unit_tests = pipelines.CodeBuildStep(
             "List Repo",
