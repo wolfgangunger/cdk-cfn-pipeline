@@ -1,6 +1,7 @@
 from constructs import Construct
 from aws_cdk import (
     Stack,
+    Stage,
     aws_iam as iam,
     pipelines,
     aws_codebuild,
@@ -13,6 +14,35 @@ import aws_cdk.aws_codepipeline as codepipeline
 from infrastructure.cicd.app_deploy import AppDeploy
 
 
+class CfnPipelineStage(Stage):
+    def __init__(
+            self, 
+            scope: Construct, 
+            id: str, 
+            source_output: str,
+            **kwargs):
+        super().__init__(scope, id, **kwargs)
+
+        stack_name = "template-005"
+        cfn_deploy = {
+            "stage_name": "Deploy",
+            "actions": [
+                cpactions.CloudFormationCreateUpdateStackAction(
+                    action_name="Deploy_CFN_Template",
+                    stack_name=stack_name,
+                    #change_set_name=change_set_name,
+                    admin_permissions=True,
+                    template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
+                    template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
+                    run_order=1
+                    #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
+                    #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
+                    #cfn_capabilities=cfn_capabilities
+                    
+                )
+            ]
+        }  
+        
 
 class CfnPipelineStack(Stack):
     def __init__(
@@ -90,7 +120,18 @@ class CfnPipelineStack(Stack):
                 )
             ]
         }  
-        #cfn_stage = pipeline.add_stage("CFN Deploy",post=[cfn_deploy])
+
+        cfn_stage = CfnPipelineStage(
+            self,
+            "cfn-stage",
+            source_output=source_output,
+            env={
+                "account": toolchain_account,
+                "region": region,
+            },
+        )
+
+        #stage = pipeline.add_stage(cfn_stage)
         # pipeline.add_stage(stage,
         #     pre=[
         #         pipelines.ConfirmPermissionsBroadening("Check", stage=stage)
@@ -194,6 +235,7 @@ class CfnPipelineStack(Stack):
     def get_synth_step_commands(self) -> list:
         commands = [
             "pwd",
+            "mkdir cdk.out"
         ]
         return commands
 
