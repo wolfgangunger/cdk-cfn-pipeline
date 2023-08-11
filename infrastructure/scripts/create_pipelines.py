@@ -67,6 +67,10 @@ def create_cfn_pipeline_from_template( stage, pipeline_template, pipeline_name):
         "BranchName"
     ] = "main"
 
+    # pipeline_describe["stages"][1]["actions"][0]["configuration"][
+    #     "File name"
+    # ] = "aws-005-test-roles/template.yaml"
+
     response = codepipeline_client.create_pipeline(pipeline=pipeline_describe)
 
 def delete_cfn_pipeline(pipeline_name):

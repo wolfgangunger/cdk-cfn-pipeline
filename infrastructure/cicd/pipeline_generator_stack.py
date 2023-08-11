@@ -12,7 +12,6 @@ from aws_cdk import aws_codebuild
 from aws_cdk.aws_codebuild import BuildEnvironment
 from aws_cdk.pipelines import CodePipeline
 
-from infrastructure.api.github_webhook_api_stack import GithubWebhookAPIStack
 from infrastructure.cicd.cfn_pipeline_stack import CfnPipelineStack
 
 

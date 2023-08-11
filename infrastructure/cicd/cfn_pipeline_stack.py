@@ -6,11 +6,9 @@ from aws_cdk import (
     aws_codebuild,
     CfnCapabilities
 )
-from aws_cdk.aws_codebuild import BuildEnvironment
-from aws_cdk.pipelines import CodePipeline
+
 import aws_cdk.aws_codepipeline_actions as cpactions
 import aws_cdk.aws_codepipeline as codepipeline
-from infrastructure.cicd.app_deploy import AppDeploy
         
 
 class CfnPipelineStack(Stack):
