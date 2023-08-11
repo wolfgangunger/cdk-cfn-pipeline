@@ -90,7 +90,16 @@ class CfnPipelineStack(Stack):
                 )
             ]
         }  
-        cfn_stage = pipeline.add_wave("CFN Deploy",post=[cfn_deploy])
+        #cfn_stage = pipeline.add_stage("CFN Deploy",post=[cfn_deploy])
+        # pipeline.add_stage(stage,
+        #     pre=[
+        #         pipelines.ConfirmPermissionsBroadening("Check", stage=stage)
+        #     ]
+        # )
+        #wave = pipeline.add_wave("Deploy")
+        
+        #wave.add_stage(pipelines.StackDeployment())
+        #cfn_stage = pipeline.add_stage(stage=cfn_deploy)
         
         # dev_app = AppDeploy(
         #         self,
