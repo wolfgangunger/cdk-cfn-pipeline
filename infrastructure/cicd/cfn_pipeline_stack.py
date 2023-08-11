@@ -79,33 +79,70 @@ class CfnPipelineStack(Stack):
         # creating the pipline with  synch action
         git_input = self.get_connection(repo_owner,repo,config,development_pipeline,codestar_connection_arn)
         
-        synth_step = self.get_synth_step(
-            git_input,
-            synth_dev_account_role_arn,
-            synth_qa_account_role_arn,
-            synth_prod_account_role_arn,
-        )
+        # synth_step = self.get_synth_step(
+        #     git_input,
+        #     synth_dev_account_role_arn,
+        #     synth_qa_account_role_arn,
+        #     synth_prod_account_role_arn,
+        # )
 
-        pipeline = CodePipeline(
-            self,
-            id,
-            pipeline_name=id,           
-            synth=synth_step,
-            cross_account_keys=True,
-            code_build_defaults=pipelines.CodeBuildOptions(
-                build_environment=BuildEnvironment(
-                    build_image=aws_codebuild.LinuxBuildImage.STANDARD_5_0,
-                    privileged=True,
-                )
-            ),
-        )
+        # pipeline = CodePipeline(
+        #     self,
+        #     id,
+        #     pipeline_name=id,           
+        #     synth=synth_step,
+        #     cross_account_keys=True,
+        #     code_build_defaults=pipelines.CodeBuildOptions(
+        #         build_environment=BuildEnvironment(
+        #             build_image=aws_codebuild.LinuxBuildImage.STANDARD_5_0,
+        #             privileged=True,
+        #         )
+        #     ),
+        # )
+ 
         # cfn deployment
         source_output = codepipeline.Artifact("SourceArtifact")
         stack_name = "template-005"
-        cfn_deploy = {
-            "stage_name": "Deploy",
-            "actions": [
-                cpactions.CloudFormationCreateUpdateStackAction(
+        # cfn_deploy = {
+        #     "stage_name": "Deploy",
+        #     "actions": [
+        #         cpactions.CloudFormationCreateUpdateStackAction(
+        #             action_name="Deploy_CFN_Template",
+        #             stack_name=stack_name,
+        #             #change_set_name=change_set_name,
+        #             admin_permissions=True,
+        #             template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
+        #             template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
+        #             run_order=1
+        #             #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
+        #             #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
+        #             #cfn_capabilities=cfn_capabilities
+                    
+        #         )
+        #     ]
+        # }
+        #pipeline3 = codepipeline.Pipeline(self, "CFN-Pipeline3")  
+
+        source_action = cpactions.CodeStarConnectionsSourceAction(
+            action_name="Github_Source",
+            owner="wolfgangunger",
+            repo="sam-cfn-pipeline-test ",
+            output=source_output,
+            connection_arn="arn:aws:codestar-connections:eu-west-1:039735417706:connection/8c2fcdc0-36a2-4942-b8eb-d9c9837e4fe2"
+        )
+
+        pipeline2 = codepipeline.Pipeline(self, "CFN-Pipeline",
+        stages=[
+            codepipeline.StageProps(
+            stage_name="Source",
+            actions=[
+                    source_action
+                 ]
+              )     ,       
+            codepipeline.StageProps(
+            stage_name="CFN-Deploy",
+            actions=[
+                    cpactions.CloudFormationCreateUpdateStackAction(
                     action_name="Deploy_CFN_Template",
                     stack_name=stack_name,
                     #change_set_name=change_set_name,
@@ -115,21 +152,22 @@ class CfnPipelineStack(Stack):
                     run_order=1
                     #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
                     #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
-                    #cfn_capabilities=cfn_capabilities
-                    
-                )
+                    #cfn_capabilities=cfn_capabilities     
+                    )
+                 ]
+              )
             ]
-        }  
+         )
 
-        cfn_stage = CfnPipelineStage(
-            self,
-            "cfn-stage",
-            source_output=source_output,
-            env={
-                "account": toolchain_account,
-                "region": region,
-            },
-        )
+        # cfn_stage = CfnPipelineStage(
+        #     self,
+        #     "cfn-stage",
+        #     source_output=source_output,
+        #     env={
+        #         "account": toolchain_account,
+        #         "region": region,
+        #     },
+        # )
 
         #stage = pipeline.add_stage(cfn_stage)
         # pipeline.add_stage(stage,
