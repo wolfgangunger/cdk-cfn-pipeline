@@ -49,7 +49,6 @@ class PipelineGeneratorStack(Stack):
         branch_name: str,
         branch_name_cfn: str,
         pipeline_template: str,
-        branch_prefix: str,
         cfn_pipeline_suffix: str,
         config: dict = None,
         **kwargs,

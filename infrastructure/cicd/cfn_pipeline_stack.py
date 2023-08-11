@@ -23,29 +23,23 @@ class CfnPipelineStack(Stack):
         **kwargs,
     ):
         super().__init__(scope, id, stack_name=id, **kwargs)
-
-        accounts = config.get("accounts")
-        region: str = accounts["tooling"]["region"]
-        dev_account: str = accounts["dev"]["account"]
-        qa_account: str = accounts["qa"]["account"]
-        toolchain_account: str = accounts["tooling"]["account"]
-        prod_account: str = accounts["prod"]["account"]
-        codestar_connection_arn = config.get("connection_arn")
         repo_owner = config.get("owner")
-        repo = config.get("repo_cfn")
-     
-
+        repo_cfn = config.get("repo_cfn")
+        connection_arn = config.get("connection_arn")
         source_output = codepipeline.Artifact("SourceArtifact")
-        stack_name = "template-005"
+        stack_name = "template-005" 
+        ## todo 
+        template = ""
+        stage = ""
 
 
         source_action = cpactions.CodeStarConnectionsSourceAction(
             action_name="Github_Source",
-            owner="wolfgangunger",
-            repo="sam-cfn-pipeline-test",
+            owner=repo_owner,
+            repo=repo_cfn,
             branch="main",
             output=source_output,
-            connection_arn="arn:aws:codestar-connections:eu-west-1:039735417706:connection/8c2fcdc0-36a2-4942-b8eb-d9c9837e4fe2"
+            connection_arn=connection_arn
         )
 
         pipeline = codepipeline.Pipeline(self, "CFN-Pipeline", pipeline_name = id,

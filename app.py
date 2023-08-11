@@ -69,7 +69,6 @@ PipelineGeneratorStack(
     branch_name=branch_name,
     branch_name_cfn=branch_name_cfn,
     pipeline_template=pipeline_template,
-    branch_prefix="^(feature|bug|hotfix)/",
     cfn_pipeline_suffix="-CFN-Pipeline",
     env=accounts.get("tooling"),
     config={**config},

@@ -47,7 +47,6 @@
           "region": "eu-central-1"
         }
       },
-      "internet_vpc": "vpc-7dcc0414",
       "development_branch": "main",
       "production_branch": "main",
       "owner": "wolfgangunger",
