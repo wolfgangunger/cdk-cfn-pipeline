@@ -9,6 +9,7 @@ In the feature branch pipeline, the script is used for getting feature branch na
 import os
 import boto3
 import json
+import re
 
 ssm_client = boto3.client("ssm")
 codepipeline_client = boto3.client("codepipeline")
@@ -18,12 +19,28 @@ feature_pipeline_suffix = os.getenv("feature_pipeline_suffix")
 branch_chars = ""
 branch_name = ""
 stage = "dev"
-folder_prefix = "aws_"
+folder_prefix = "cfn_"
 # directory/folder path
 dir_path = r'.'
 # dict to store files
 #res = []
 templates = {}
+
+def is_folder_name_in_ssm(folder_name):
+    #folder_chars = re.sub("[^0-9a-zA-Z-]+", "", str(folder_name))
+    response = ssm_client.get_parameter(
+      Name=folder_name,
+      WithDecryption=True|False
+    ) 
+    print(response)
+    return response
+   
+def save_folder_name_in_ssm(folder_name):
+    #folder_chars = re.sub("[^0-9a-zA-Z-]+", "", str(folder_name))
+
+    response = ssm_client.put_parameter(
+        Name=folder_name, Value=folder_name, Type="String", Overwrite=True
+    )
 
 if __name__ == "__main__":
 
@@ -43,5 +60,6 @@ if __name__ == "__main__":
     for key in templates:
         print(key)
         # check ssm
-        
+        #is_folder_name_in_ssm(key)
+        save_folder_name_in_ssm(key)
         #create pipeline
