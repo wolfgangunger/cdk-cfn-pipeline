@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Get branch name from Parameter Store
-In the feature branch pipeline, the script is used for getting feature branch name from ssm
+Create the cfn pipelines and store cfn template in ssm
 """
 
 import os
@@ -69,6 +68,7 @@ def delete_cfn_pipeline(pipeline_name):
     codepipeline_client = boto3.client("codepipeline")
     response = codepipeline_client.delete_pipeline(name=pipeline_name)
 
+##########################
 if __name__ == "__main__":
 
     print("create pipelines for cfn templates")
@@ -98,3 +98,37 @@ if __name__ == "__main__":
           msg = f"Done feature pipeline generation for: {branch_name}"
         else:
             print ("ssm param already exists: " + key)  
+
+     ### delete pipeline
+    #client = boto3.client('ssm')
+    print("delete pipelines")
+    p = ssm_client.get_paginator('describe_parameters')
+    paginator = p.paginate().build_full_result()
+    for page in paginator['Parameters']:
+        response = ssm_client.get_parameter(Name=page['Name'])
+        print(response)
+        #value = response['Parameter']['Value']
+        #if LBURL in value:
+         #   print("Name is: " + page['Name'] + " and Value is: " + value)
+    # response = ssm_client.describe_parameters(
+    #     Filters=[
+    #         {
+    #             'Key': 'Name',
+    #             'Values': [
+    #                 'string',
+    #             ]
+    #         },
+    #     ],
+    #     ParameterFilters=[
+    #         {
+    #             'Key': 'string',
+    #             'Option': 'string',
+    #             'Values': [
+    #                 'string',
+    #             ]
+    #         },
+    #     ],
+    #     MaxResults=180,
+    #     NextToken='string'
+    # )   
+    # print(response)    
