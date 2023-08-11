@@ -131,7 +131,7 @@ class CfnPipelineStack(Stack):
             connection_arn="arn:aws:codestar-connections:eu-west-1:039735417706:connection/8c2fcdc0-36a2-4942-b8eb-d9c9837e4fe2"
         )
 
-        pipeline2 = codepipeline.Pipeline(self, "CFN-Pipeline",
+        pipeline2 = codepipeline.Pipeline(self, "CFN-Pipeline", pipeline_name = id,
         stages=[
             codepipeline.StageProps(
             stage_name="Source",

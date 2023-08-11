@@ -28,12 +28,17 @@ templates = {}
 
 def is_folder_name_in_ssm(folder_name):
     #folder_chars = re.sub("[^0-9a-zA-Z-]+", "", str(folder_name))
-    response = ssm_client.get_parameter(
-      Name=folder_name,
-      WithDecryption=True|False
-    ) 
-    print(response)
-    return response
+    try:
+        response = ssm_client.get_parameter(
+        Name=folder_name,
+        WithDecryption=True|False
+        ) 
+        print ("exists")
+        return response
+    except ssm_client.exceptions.ParameterNotFound:
+         print("not exists")  
+         return None 
+
    
 def save_folder_name_in_ssm(folder_name):
     #folder_chars = re.sub("[^0-9a-zA-Z-]+", "", str(folder_name))
@@ -51,7 +56,6 @@ if __name__ == "__main__":
             if file_path.startswith(folder_prefix):
               vars = open(file_path + "/vars_" + stage + ".json")
               data = json.load(vars)
-              #print(data)
               templates[file_path] = data
 
 
@@ -60,6 +64,10 @@ if __name__ == "__main__":
     for key in templates:
         print(key)
         # check ssm
-        #is_folder_name_in_ssm(key)
-        save_folder_name_in_ssm(key)
-        #create pipeline
+        exists = is_folder_name_in_ssm(key)
+        if not exists:
+          print("create ssm for " + key)
+          save_folder_name_in_ssm(key)
+          #create pipeline
+        else:
+            print ("ssm param already exists: " + key)  
