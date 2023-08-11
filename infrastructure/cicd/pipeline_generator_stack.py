@@ -283,8 +283,8 @@ class PipelineGeneratorStack(Stack):
         commands = [
             "pwd",
             "ls",
-            "python infrastructure/scripts/create_pipelines.py",
-            "set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
+            #"python infrastructure/scripts/create_pipelines.py",
+            #"set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
         ]
         return commands    
     ###
@@ -301,7 +301,7 @@ class PipelineGeneratorStack(Stack):
             "pip install -r requirements.txt && pip install -r requirements-dev.txt",
             "pwd",
             "ls",
-            "python infrastructure/scripts/list_repo.py",
-            "set -e;REPOS=$(python infrastructure/scripts/list_repo.py)"
+            #"python infrastructure/scripts/list_repo.py",
+            #"set -e;REPOS=$(python infrastructure/scripts/list_repo.py)"
         ]
         return commands 

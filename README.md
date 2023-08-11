@@ -1,3 +1,5 @@
+python ./infrastructure/scripts/create_pipelines.py
+
 # cdk-codepipeline
 cdk project with codepipeline to generate pipelines for cloud formation templates
 

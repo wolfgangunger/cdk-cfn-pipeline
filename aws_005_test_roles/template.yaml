@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Test IAM Roles'
+
+Parameters:
+  OwnerName:
+    Description: An owner name, used in tags
+    Type: String
+    Default: "wolfgang.unger"
+
+  ReadOnlyUsersArns: 
+    Description: A comma delimited list of Read Only user arn's 
+    Type: CommaDelimitedList
+
+
+Resources:
+
+  ReadOnlyRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: ReadOnlyRoleTestPipeline
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              AWS: !Ref ReadOnlyUsersArns       
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+      Tags:
+        - Key: Name
+          Value: 'ReadOnlyRoleTestPipeline'
+        - Key: Owner
+          Value: !Ref OwnerName
+
+
+
+ 
+
+
+

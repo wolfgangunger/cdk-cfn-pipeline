@@ -20,25 +20,17 @@ branch_name = ""
 dir_path = r'.'
 # list to store files
 res = []
+dirs = []
 
 if __name__ == "__main__":
-    ## CODEBUILD_INITIATOR="codepipeline/feature-branch-pipeline"
-    #CODEBUILD_INITIATOR_LIST = os.getenv("CODEBUILD_INITIATOR").split("/")
-    #if len(CODEBUILD_INITIATOR_LIST) >= 2:
-    #    if CODEBUILD_INITIATOR_LIST[0] == "codepipeline":
-    #        branch_chars = CODEBUILD_INITIATOR_LIST[-1].replace(
-    #            feature_pipeline_suffix, ""
-    #        )
-    #        if branch_chars:
-    #            response = ssm_client.get_parameter(
-    #                Name=branch_chars,
-    #            )
-    #            branch_name = response.get("Parameter", {}).get("Value", "")
-    #            print(branch_name)
-    print("create pipelines for cfn ...")
+
+    print("create pipelines for cfn templates")
     for file_path in os.listdir(dir_path):
         # check if current file_path is a file
-        if os.path.isfile(os.path.join(dir_path, file_path)):
+        if not os.path.isfile(os.path.join(dir_path, file_path)):
+            if file_path.startswith("aws"):
             # add filename to list
-            res.append(file_path)
-    print(res)
+             dirs.append(file_path)
+
+
+    print(dirs)
