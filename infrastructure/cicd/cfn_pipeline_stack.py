@@ -69,38 +69,39 @@ class CfnPipelineStack(Stack):
                 )
             ),
         )
-
+        # cfn deployment
         source_output = codepipeline.Artifact("SourceArtifact")
-        # stack_name = "template-005"
-        # cfn_deploy = {
-        #     "stage_name": "Deploy",
-        #     "actions": [
-        #         cpactions.CloudFormationCreateUpdateStackAction(
-        #             action_name="Deploy_CFN_Template",
-        #             stack_name=stack_name,
-        #             #change_set_name=change_set_name,
-        #             admin_permissions=True,
-        #             template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
-        #             template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
-        #             run_order=1
-        #             #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
-        #             #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
-        #             #cfn_capabilities=cfn_capabilities
+        stack_name = "template-005"
+        cfn_deploy = {
+            "stage_name": "Deploy",
+            "actions": [
+                cpactions.CloudFormationCreateUpdateStackAction(
+                    action_name="Deploy_CFN_Template",
+                    stack_name=stack_name,
+                    #change_set_name=change_set_name,
+                    admin_permissions=True,
+                    template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
+                    template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
+                    run_order=1
+                    #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
+                    #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
+                    #cfn_capabilities=cfn_capabilities
                     
-        #         )
-        #     ]
-        # }  
-        # cfn_stage = pipeline.add_stage(cfn_deploy)
-        dev_app = AppDeploy(
-                self,
-                "dev",
-                source_output,
-                config=config,
-                env={
-                    "account": dev_account,
-                    "region": region,
-                },
-        )
+                )
+            ]
+        }  
+        cfn_stage = pipeline.add_wave("CFN Deploy",post=[cfn_deploy])
+        
+        # dev_app = AppDeploy(
+        #         self,
+        #         "dev",
+        #         source_output,
+        #         config=config,
+        #         env={
+        #             "account": dev_account,
+        #             "region": region,
+        #         },
+        # )
         # if development_pipeline:
         #     # Dev deploy
         #     dev_app = AppDeploy(
