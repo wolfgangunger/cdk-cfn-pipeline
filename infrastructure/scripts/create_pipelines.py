@@ -8,6 +8,7 @@ In the feature branch pipeline, the script is used for getting feature branch na
 
 import os
 import boto3
+import json
 
 ssm_client = boto3.client("ssm")
 codepipeline_client = boto3.client("codepipeline")
@@ -16,11 +17,13 @@ sm_client = boto3.client("secretsmanager")
 feature_pipeline_suffix = os.getenv("feature_pipeline_suffix")
 branch_chars = ""
 branch_name = ""
+stage = "dev"
+folder_prefix = "aws_"
 # directory/folder path
 dir_path = r'.'
-# list to store files
-res = []
-dirs = []
+# dict to store files
+#res = []
+templates = {}
 
 if __name__ == "__main__":
 
@@ -28,9 +31,17 @@ if __name__ == "__main__":
     for file_path in os.listdir(dir_path):
         # check if current file_path is a file
         if not os.path.isfile(os.path.join(dir_path, file_path)):
-            if file_path.startswith("aws"):
-            # add filename to list
-             dirs.append(file_path)
+            if file_path.startswith(folder_prefix):
+              vars = open(file_path + "/vars_" + stage + ".json")
+              data = json.load(vars)
+              #print(data)
+              templates[file_path] = data
 
 
-    print(dirs)
+    print(templates)
+    print("###")
+    for key in templates:
+        print(key)
+        # check ssm
+        
+        #create pipeline

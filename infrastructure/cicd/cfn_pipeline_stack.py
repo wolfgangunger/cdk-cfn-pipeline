@@ -53,7 +53,7 @@ class CfnPipelineStack(Stack):
         config: dict = None,
         **kwargs,
     ):
-        super().__init__(scope, id, **kwargs)
+        super().__init__(scope, id, stack_name="id", **kwargs)
 
         accounts = config.get("accounts")
         region: str = accounts["tooling"]["region"]

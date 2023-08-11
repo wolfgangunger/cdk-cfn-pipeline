@@ -30,30 +30,14 @@ class PipelineGeneratorApplicationBootstrap(Stage):
         # a template pipeline for each cloudformation template
         CfnPipelineStack(
             self,
-            pipeline_template,
+            #pipeline_template,
+            "cfn-pipeline-template",
             development_pipeline=True,
             #feature_branch_name="not_exist_branch_to_avoid_running",
             #cfn_pipeline_suffix=cfn_pipeline_suffix,
             config={**config},
             synthesizer=DefaultStackSynthesizer(),
         )
-
-class PipelineGeneratorApplication(Stage):
-    def __init__(
-        self,
-        scope: Construct,
-        id: str,
-        pipeline_template: str,
-        branch_prefix: str,
-        cfn_pipeline_suffix: str,
-        config: dict = None,
-        **kwargs,
-    ):
-        super().__init__(scope, id, **kwargs)
-        print("Stage")
-        #create pipelines for each cfn folder
-
-
 
 
 
@@ -112,7 +96,7 @@ class PipelineGeneratorStack(Stack):
             connection_arn=codestar_connection_arn,
         )
 
-       # creating the pipline with  synch action
+       # creating the generator pipline with  synch action
         synth_step = self.get_sync_step(
             git_input,
             synth_dev_account_role_arn,
@@ -171,19 +155,7 @@ class PipelineGeneratorStack(Stack):
         wave = pipeline.add_wave("Create_Cfn_Pipelines", post=[create_cfn_pipelines_step])
 
 
-        # pipeline_generator_stage = PipelineGeneratorApplication(
-        #     self,
-        #     "pipeline-generator-stage",
-        #     pipeline_template=pipeline_template,
-        #     branch_prefix=branch_prefix,
-        #     cfn_pipeline_suffix=cfn_pipeline_suffix,
-        #     config=config,
-        #     env={
-        #         "account": toolchain_account,
-        #         "region": region,
-        #     },
-        # )
-        # dev_stage = pipeline.add_stage(pipeline_generator_stage)
+ 
 
 
 
