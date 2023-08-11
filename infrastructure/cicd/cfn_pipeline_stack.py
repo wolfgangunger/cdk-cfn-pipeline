@@ -12,36 +12,6 @@ from aws_cdk.pipelines import CodePipeline
 import aws_cdk.aws_codepipeline_actions as cpactions
 import aws_cdk.aws_codepipeline as codepipeline
 from infrastructure.cicd.app_deploy import AppDeploy
-
-
-class CfnPipelineStage(Stage):
-    def __init__(
-            self, 
-            scope: Construct, 
-            id: str, 
-            source_output: str,
-            **kwargs):
-        super().__init__(scope, id, **kwargs)
-
-        stack_name = "template-005"
-        cfn_deploy = {
-            "stage_name": "Deploy",
-            "actions": [
-                cpactions.CloudFormationCreateUpdateStackAction(
-                    action_name="Deploy_CFN_Template",
-                    stack_name=stack_name,
-                    #change_set_name=change_set_name,
-                    admin_permissions=True,
-                    template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
-                    template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
-                    run_order=1
-                    #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
-                    #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
-                    #cfn_capabilities=cfn_capabilities
-                    
-                )
-            ]
-        }  
         
 
 class CfnPipelineStack(Stack):
@@ -127,6 +97,7 @@ class CfnPipelineStack(Stack):
             action_name="Github_Source",
             owner="wolfgangunger",
             repo="sam-cfn-pipeline-test ",
+            branch="main",
             output=source_output,
             connection_arn="arn:aws:codestar-connections:eu-west-1:039735417706:connection/8c2fcdc0-36a2-4942-b8eb-d9c9837e4fe2"
         )
