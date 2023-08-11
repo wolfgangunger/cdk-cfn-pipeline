@@ -1,7 +1,6 @@
 from constructs import Construct
 from aws_cdk import (
     Stack,
-    Stage,
     aws_iam as iam,
     pipelines,
     aws_codebuild,
@@ -34,19 +33,6 @@ class CfnPipelineStack(Stack):
         codestar_connection_arn = config.get("connection_arn")
         repo_owner = config.get("owner")
         repo = config.get("repo_cfn")
-
-        # synth_dev_account_role_arn = (
-        #     f"arn:aws:iam::{dev_account}:role/codebuild-role-from-toolchain-account"
-        # )
-
-        # synth_qa_account_role_arn = (
-        #     f"arn:aws:iam::{qa_account}:role/codebuild-role-from-toolchain-account"
-        # )
-        # synth_prod_account_role_arn = (
-        #     f"arn:aws:iam::{prod_account}:role/codebuild-role-from-toolchain-account"
-        # )
-
-
      
 
         source_output = codepipeline.Artifact("SourceArtifact")

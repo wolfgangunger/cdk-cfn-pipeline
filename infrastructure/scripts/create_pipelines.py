@@ -46,6 +46,11 @@ def save_folder_name_in_ssm(folder_name):
         Name=folder_name, Value=folder_name, Type="String", Overwrite=True
     )
 
+def delete_folder_name_in_ssm(folder_name):
+    response = ssm_client.delete_parameter(
+      Name=folder_name
+     )  
+###
 def create_cfn_pipeline_from_template( stage, pipeline_template, pipeline_name):
     codepipeline_client = boto3.client("codepipeline")
     response = codepipeline_client.get_pipeline(
@@ -99,36 +104,24 @@ if __name__ == "__main__":
         else:
             print ("ssm param already exists: " + key)  
 
-     ### delete pipeline
-    #client = boto3.client('ssm')
+     ### delete pipeline and parameter
     print("delete pipelines")
     p = ssm_client.get_paginator('describe_parameters')
     paginator = p.paginate().build_full_result()
     for page in paginator['Parameters']:
         response = ssm_client.get_parameter(Name=page['Name'])
-        print(response)
-        #value = response['Parameter']['Value']
-        #if LBURL in value:
-         #   print("Name is: " + page['Name'] + " and Value is: " + value)
-    # response = ssm_client.describe_parameters(
-    #     Filters=[
-    #         {
-    #             'Key': 'Name',
-    #             'Values': [
-    #                 'string',
-    #             ]
-    #         },
-    #     ],
-    #     ParameterFilters=[
-    #         {
-    #             'Key': 'string',
-    #             'Option': 'string',
-    #             'Values': [
-    #                 'string',
-    #             ]
-    #         },
-    #     ],
-    #     MaxResults=180,
-    #     NextToken='string'
-    # )   
-    # print(response)    
+        #print(response)
+        #print(response.get("Parameter"))
+        p_name = response.get("Parameter").get("Name")
+        print(p_name)
+        if p_name.startswith("cfn"):
+            print("cfn parameter")
+            if not p_name in templates:
+                print ("deleting pipeline for " + p_name)
+                delete_cfn_pipeline("cfn-pipeline-" + p_name)
+                #delete parameter
+                print("delete parameter for " + p_name)
+                delete_folder_name_in_ssm(p_name)
+        else:
+            print("no cfn parameter")     
+ 
