@@ -213,15 +213,15 @@ class PipelineGeneratorStack(Stack):
         commands = [
             "pwd",
             "ls",
-            "cd cdk_input",
-            "ls",
-            "cd ..",
-            "cd subdir",
-            "ls",
+            # "cd cdk_input",
+            # "ls",
+            # "cd ..",
+            # "cd subdir",
+            # "ls",
             #"cat create_pipelines.py",
             #"cd ..",
             #"cd ..",
-            #"python infrastructure/scripts/create_pipelines.py",
+            "python subdir/infrastructure/scripts/create_pipelines.py",
             #"python ./infrastructure/scripts/create_pipelines.py",
             #"set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
         ]
