@@ -26,11 +26,10 @@ class PipelineGeneratorApplicationBootstrap(Stage):
         super().__init__(scope, id, **kwargs)
 
  
-        # a template pipeline for each cloudformation template
+        # a template pipeline for each cloudformation stack
         CfnPipelineStack(
             self,
             "cfn-pipeline-template",
-            development_pipeline=True,
             config={**config},
             synthesizer=DefaultStackSynthesizer(),
         )
@@ -217,6 +216,11 @@ class PipelineGeneratorStack(Stack):
     def create_cfn_pipelines_step_commands(self) -> list:
         commands = [
             "pwd",
+            "ls",
+            "cd infrastructure",
+            "ls",
+            "cd ..",
+            "cd subdir",
             "ls",
             #"python infrastructure/scripts/create_pipelines.py",
             #"set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"

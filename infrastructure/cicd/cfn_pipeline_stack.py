@@ -16,7 +16,6 @@ class CfnPipelineStack(Stack):
         self,
         scope: Construct,
         id: str,
-        development_pipeline: bool,
         config: dict = None,
         **kwargs,
     ):
@@ -55,8 +54,8 @@ class CfnPipelineStack(Stack):
                     action_name="Deploy_CFN_Template",
                     stack_name=stack_name,
                     admin_permissions=True,
-                    template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
-                    template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
+                    template_path=source_output.at_path("cfn_001_to_be_replaced/template.yaml"),
+                    template_configuration=source_output.at_path("cfn_001_to_be_replaced/vars_dev.json"),
                     run_order=1
                     #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
                     #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
