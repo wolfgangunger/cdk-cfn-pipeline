@@ -195,10 +195,6 @@ class PipelineGeneratorStack(Stack):
                 "subdir": git_input,
                 "./infrastructure/scripts/create_pipelines.py": synth_step 
             },
-            #additional_inputs={
-            # "subdir": pipelines.CodePipelineSource.git_hub("wolfgangunger/cdk-cfn-pipeline2", "main"),
-            #"./infrastructure/scripts/create_pipelines.py": synth_step #prebuild
-            #},
             commands=self.create_cfn_pipelines_step_commands(),
             env={"BRANCH": branch_name},
             role_policy_statements=[
