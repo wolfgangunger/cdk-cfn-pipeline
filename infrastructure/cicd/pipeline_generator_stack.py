@@ -220,7 +220,8 @@ class PipelineGeneratorStack(Stack):
             "cat create_pipelines.py"
             "cd ..",
             "cd ..",
-            "python infrastructure/scripts/create_pipelines.py",
+            #"python infrastructure/scripts/create_pipelines.py",
+            "python ./infrastructure/scripts/create_pipelines.py",
             #"set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
         ]
         return commands    
