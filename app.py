@@ -73,5 +73,5 @@ PipelineGeneratorStack(
     env=accounts.get("tooling"),
     config={**config},
 )
-print(config.get("repo_cfn"))
+
 app.synth()

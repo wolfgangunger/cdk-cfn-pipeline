@@ -54,7 +54,6 @@ class CfnPipelineStack(Stack):
                     cpactions.CloudFormationCreateUpdateStackAction(
                     action_name="Deploy_CFN_Template",
                     stack_name=stack_name,
-                    #change_set_name=change_set_name,
                     admin_permissions=True,
                     template_path=source_output.at_path("aws-005-test-roles/template.yaml"),
                     template_configuration=source_output.at_path("aws-005-test-roles/vars_dev.json"),
