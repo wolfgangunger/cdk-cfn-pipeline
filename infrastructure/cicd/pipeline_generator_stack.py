@@ -192,7 +192,8 @@ class PipelineGeneratorStack(Stack):
             input=git_input_cfn,
             additional_inputs={
                 "subdir": git_input,
-                "./infrastructure/scripts/create_pipelines.py": synth_step 
+                #"./infrastructure/scripts/create_pipelines.py": synth_step 
+                "./cdk_input": synth_step         
             },
             commands=self.create_cfn_pipelines_step_commands(),
             env={"BRANCH": branch_name},
@@ -210,18 +211,18 @@ class PipelineGeneratorStack(Stack):
     
     def create_cfn_pipelines_step_commands(self) -> list:
         commands = [
-            #"cat infrastructure/scripts/create_pipelines.py"
             "pwd",
             "ls",
-            "cd infrastructure",
+            "cd cdk_input",
             "ls",
-            "cd scripts",
+            "cd ..",
+            "cd subdir",
             "ls",
-            "cat create_pipelines.py",
-            "cd ..",
-            "cd ..",
+            #"cat create_pipelines.py",
+            #"cd ..",
+            #"cd ..",
             #"python infrastructure/scripts/create_pipelines.py",
-            "python ./infrastructure/scripts/create_pipelines.py",
+            #"python ./infrastructure/scripts/create_pipelines.py",
             #"set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
         ]
         return commands    
