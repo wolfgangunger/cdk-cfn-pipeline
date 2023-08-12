@@ -29,11 +29,8 @@ class PipelineGeneratorApplicationBootstrap(Stage):
         # a template pipeline for each cloudformation template
         CfnPipelineStack(
             self,
-            #pipeline_template,
             "cfn-pipeline-template",
             development_pipeline=True,
-            #feature_branch_name="not_exist_branch_to_avoid_running",
-            #cfn_pipeline_suffix=cfn_pipeline_suffix,
             config={**config},
             synthesizer=DefaultStackSynthesizer(),
         )

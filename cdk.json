@@ -51,7 +51,7 @@
       "production_branch": "main",
       "owner": "wolfgangunger",
       "repo": "cdk-cfn-pipeline",
-      "repo_cfn": "sam-cfn-pipeline-test",
+      "repo_cfn": "cfn_for_pipeline ",
       "connection_arn": "arn:aws:codestar-connections:eu-west-1:039735417706:connection/8c2fcdc0-36a2-4942-b8eb-d9c9837e4fe2"
     }
   }
