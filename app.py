@@ -54,14 +54,11 @@ BootstrapRoleStack(
     },
 )
 
-
-
 config = app.node.try_get_context("config")
 accounts = config.get("accounts")
 
 branch_name = "main"
 branch_name_cfn = "main"
-#pipeline_template = "feature-branch-pipeline-template"
 pipeline_template = "cfn-deploy-pipeline-template"
 PipelineGeneratorStack(
     app,
@@ -69,7 +66,6 @@ PipelineGeneratorStack(
     branch_name=branch_name,
     branch_name_cfn=branch_name_cfn,
     pipeline_template=pipeline_template,
-    cfn_pipeline_suffix="-CFN-Pipeline",
     env=accounts.get("tooling"),
     config={**config},
 )

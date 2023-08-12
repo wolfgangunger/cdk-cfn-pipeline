@@ -14,7 +14,7 @@ from aws_cdk.pipelines import CodePipeline
 
 from infrastructure.cicd.cfn_pipeline_stack import CfnPipelineStack
 
-
+# the stage to deploy the cfn-pipeline template
 class PipelineGeneratorApplicationBootstrap(Stage):
     def __init__(
             self, 
@@ -35,7 +35,7 @@ class PipelineGeneratorApplicationBootstrap(Stage):
         )
 
 
-
+# the pipeline generator itself
 class PipelineGeneratorStack(Stack):
     def __init__(
         self,
@@ -44,7 +44,6 @@ class PipelineGeneratorStack(Stack):
         branch_name: str,
         branch_name_cfn: str,
         pipeline_template: str,
-        cfn_pipeline_suffix: str,
         config: dict = None,
         **kwargs,
     ):
@@ -179,7 +178,7 @@ class PipelineGeneratorStack(Stack):
         return commands
 
     
-    ###
+   
     def create_cfn_pipelines_step(
         self,
         git_input_cfn,
@@ -218,9 +217,6 @@ class PipelineGeneratorStack(Stack):
             "cd scripts",
             "ls",
             "cd ..",
-            "cd ..",
-            "cd subdir",
-            "ls",
             "cd ..",
             "python infrastructure/scripts/create_pipelines.py",
             #"set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
