@@ -210,12 +210,14 @@ class PipelineGeneratorStack(Stack):
     
     def create_cfn_pipelines_step_commands(self) -> list:
         commands = [
+            "cat infrastructure/scripts/create_pipelines.py"
             "pwd",
             "ls",
             "cd infrastructure",
             "ls",
             "cd scripts",
             "ls",
+            "cat create_pipelines.py"
             "cd ..",
             "cd ..",
             "python infrastructure/scripts/create_pipelines.py",
