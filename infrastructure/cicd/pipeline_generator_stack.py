@@ -131,6 +131,7 @@ class PipelineGeneratorStack(Stack):
         create_cfn_pipelines_step = self.create_cfn_pipelines_step(
             git_input_cfn,
             git_input,
+            synth_step,
             synth_dev_account_role_arn,
             branch_name,
         )
@@ -184,16 +185,20 @@ class PipelineGeneratorStack(Stack):
         self,
         git_input_cfn,
         git_input,
+        synth_step,
         synth_dev_account_role_arn,
         branch_name,
     ):
         cfn_repo_step = pipelines.CodeBuildStep(
             "Create CFN Pipelines",
             input=git_input_cfn,
-            #additional_inputs=git_input,
+            additional_inputs={
+                "subdir": git_input,
+                "./infrastructure/scripts/create_pipelines.py": synth_step 
+            },
             #additional_inputs={
-            # "subdir": pipelines.CodePipelineSource.git_hub("wolfgangunger/cdk-cfn-pipeline", "main"),
-            # #"./infrastructure/scripts/create_pipelines.py": prebuild
+            # "subdir": pipelines.CodePipelineSource.git_hub("wolfgangunger/cdk-cfn-pipeline2", "main"),
+            #"./infrastructure/scripts/create_pipelines.py": synth_step #prebuild
             #},
             commands=self.create_cfn_pipelines_step_commands(),
             env={"BRANCH": branch_name},
