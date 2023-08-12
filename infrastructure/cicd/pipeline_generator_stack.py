@@ -217,7 +217,7 @@ class PipelineGeneratorStack(Stack):
             "ls",
             "cd scripts",
             "ls",
-            "cat create_pipelines.py"
+            "cat create_pipelines.py",
             "cd ..",
             "cd ..",
             #"python infrastructure/scripts/create_pipelines.py",
