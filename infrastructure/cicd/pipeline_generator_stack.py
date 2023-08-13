@@ -14,18 +14,19 @@ from aws_cdk.pipelines import CodePipeline
 
 from infrastructure.cicd.cfn_pipeline_stack import CfnPipelineStack
 
+
 # the stage to deploy the cfn-pipeline template
 class PipelineGeneratorApplicationBootstrap(Stage):
     def __init__(
-            self, 
-            scope: Construct, 
-            id: str, 
-            pipeline_template: str,
-            config: dict = None, 
-            **kwargs):
+        self,
+        scope: Construct,
+        id: str,
+        pipeline_template: str,
+        config: dict = None,
+        **kwargs,
+    ):
         super().__init__(scope, id, **kwargs)
 
- 
         # a template pipeline for each cloudformation stack
         CfnPipelineStack(
             self,
@@ -71,7 +72,7 @@ class PipelineGeneratorStack(Stack):
         repo_owner = config.get("owner")
         repo = config.get("repo")
         repo_cfn = config.get("repo_cfn")
-        #repo_cfn = "sam-cfn-pipeline-test"
+        # repo_cfn = "sam-cfn-pipeline-test"
 
         source_artifact = codepipeline.Artifact()
         cloud_assembly_artifact = codepipeline.Artifact()
@@ -82,14 +83,14 @@ class PipelineGeneratorStack(Stack):
             branch=branch_name,
             connection_arn=codestar_connection_arn,
         )
-        # git input for the cfn repo 
+        # git input for the cfn repo
         git_input_cfn = pipelines.CodePipelineSource.connection(
             repo_string=f"{repo_owner}/{repo_cfn}",
             branch=branch_name_cfn,
             connection_arn=codestar_connection_arn,
         )
 
-       # creating the generator pipline with  synch action
+        # creating the generator pipline with  synch action
         synth_step = self.get_sync_step(
             git_input,
             synth_dev_account_role_arn,
@@ -124,8 +125,7 @@ class PipelineGeneratorStack(Stack):
         )
         dev_bootstrap_stage = pipeline.add_stage(pipeline_generator_bootstrap_stage)
 
-
-       # action for creating the pipelines
+        # action for creating the pipelines
         create_cfn_pipelines_step = self.create_cfn_pipelines_step(
             git_input_cfn,
             git_input,
@@ -133,10 +133,9 @@ class PipelineGeneratorStack(Stack):
             synth_dev_account_role_arn,
             branch_name,
         )
-        wave = pipeline.add_wave("Create_Cfn_Pipelines", post=[create_cfn_pipelines_step])
-
-
- 
+        wave = pipeline.add_wave(
+            "Create_Cfn_Pipelines", post=[create_cfn_pipelines_step]
+        )
 
     ###
 
@@ -166,7 +165,7 @@ class PipelineGeneratorStack(Stack):
             ],
         )
         return synth_step
-    
+
     ###
     def get_sync_step_commands(self) -> list:
         commands = [
@@ -177,8 +176,6 @@ class PipelineGeneratorStack(Stack):
         ]
         return commands
 
-    
-   
     def create_cfn_pipelines_step(
         self,
         git_input_cfn,
@@ -190,11 +187,7 @@ class PipelineGeneratorStack(Stack):
         cfn_repo_step = pipelines.CodeBuildStep(
             "Create CFN Pipelines",
             input=git_input_cfn,
-            additional_inputs={
-                "subdir": git_input,
-                #"./infrastructure/scripts/create_pipelines.py": synth_step 
-                "./cdk_input": synth_step         
-            },
+            additional_inputs={"subdir": git_input, "./cdk_input": synth_step},
             commands=self.create_cfn_pipelines_step_commands(),
             env={"BRANCH": branch_name},
             role_policy_statements=[
@@ -205,25 +198,24 @@ class PipelineGeneratorStack(Stack):
                         synth_dev_account_role_arn,
                     ],
                 ),
+                aws_iam.PolicyStatement(
+                    actions=["ssm:*"],
+                    effect=aws_iam.Effect.ALLOW,
+                    resources=["*"],
+                ),
+                aws_iam.PolicyStatement(
+                    actions=["cloudformation:*"],
+                    effect=aws_iam.Effect.ALLOW,
+                    resources=["*"],
+                ),
             ],
         )
         return cfn_repo_step
-    
+
     def create_cfn_pipelines_step_commands(self) -> list:
         commands = [
             "pwd",
             "ls",
-            # "cd cdk_input",
-            # "ls",
-            # "cd ..",
-            # "cd subdir",
-            # "ls",
-            #"cat create_pipelines.py",
-            #"cd ..",
-            #"cd ..",
             "python subdir/infrastructure/scripts/create_pipelines.py",
-            #"python ./infrastructure/scripts/create_pipelines.py",
-            #"set -e;REPOS=$(python infrastructure/scripts/create_pipelines.py)"
         ]
-        return commands    
-
+        return commands
