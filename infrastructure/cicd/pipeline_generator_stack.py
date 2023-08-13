@@ -208,6 +208,11 @@ class PipelineGeneratorStack(Stack):
                     effect=aws_iam.Effect.ALLOW,
                     resources=["*"],
                 ),
+                aws_iam.PolicyStatement(
+                    actions=["codepipeline:*"],
+                    effect=aws_iam.Effect.ALLOW,
+                    resources=["*"],
+                ),            
             ],
         )
         return cfn_repo_step
