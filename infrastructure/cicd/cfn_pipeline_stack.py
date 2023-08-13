@@ -38,7 +38,35 @@ class CfnPipelineStack(Stack):
             output=source_output,
             connection_arn=connection_arn
         )
+        ##
+        # self.kms_policy_document = iam.PolicyDocument(
+        #     statements=[
+        #         iam.PolicyStatement(
+        #             actions=[
+        #                 "kms:*"
+        #             ],
+        #             effect=iam.Effect.ALLOW,
+        #             resources=["*"],
+        #         )
+        #     ]
+        # )
 
+        self.cfn_deploy_role = iam.Role(
+            self,
+            id='cfn-deploy-role',
+            assumed_by=iam.ServicePrincipal('cloudformation.amazonaws.com'),
+            role_name=f'{id}-cfn-deploy-role',
+            description='Allows CloudFormation Deployment',
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(
+                    'AWSCloudFormationFullAccess'),
+                iam.ManagedPolicy.from_aws_managed_policy_name(
+                    'AmazonSSMFullAccess')
+            ],
+            # inline_policies={"KMSPolicyDocument": self.kms_policy_document,
+            #                  "RolePolicyDocument": self.role_policy}
+        )
+        ##
         pipeline = codepipeline.Pipeline(self, "CFN-Pipeline", pipeline_name = id,
         stages=[
             codepipeline.StageProps(
@@ -56,7 +84,8 @@ class CfnPipelineStack(Stack):
                     admin_permissions=True,
                     template_path=source_output.at_path("cfn_001_to_be_replaced/template.yaml"),
                     template_configuration=source_output.at_path("cfn_001_to_be_replaced/vars_dev.json"),
-                    run_order=1
+                    run_order=1,
+                    role=self.cfn_deploy_role 
                     #cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
                     #cfn_capabilities=[CfnCapabilities.NAMED_IAM]
                     #cfn_capabilities=cfn_capabilities     
