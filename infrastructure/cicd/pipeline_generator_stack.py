@@ -218,7 +218,13 @@ class PipelineGeneratorStack(Stack):
                     actions=["iam:*"],
                     effect=aws_iam.Effect.ALLOW,
                     resources=["*"],
-                ),                          
+                ),    
+                #codestar-connections:PassConnection action
+                aws_iam.PolicyStatement(
+                    actions=["codestar-connections:*"],
+                    effect=aws_iam.Effect.ALLOW,
+                    resources=["*"],
+                ),                             
             ],
         )
         return cfn_repo_step
