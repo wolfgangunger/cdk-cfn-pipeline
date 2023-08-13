@@ -39,7 +39,7 @@ class CfnPipelineStack(Stack):
                     actions=["sts:AssumeRole"],
                     effect=iam.Effect.ALLOW,
                     resources=[
-                        account_role_arn,
+                        "*"
                     ],
                 ),
                 iam.PolicyStatement(
@@ -65,7 +65,7 @@ class CfnPipelineStack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name(
                     'AdministratorAccess')
             ],
-            inline_policies={"CFNPolicyDocument": self.cfn_policy_document},
+            #inline_policies={"CFNPolicyDocument": self.cfn_policy_document},
         )
         ##
         pipeline = codepipeline.Pipeline(
