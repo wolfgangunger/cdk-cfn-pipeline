@@ -212,7 +212,13 @@ class PipelineGeneratorStack(Stack):
                     actions=["codepipeline:*"],
                     effect=aws_iam.Effect.ALLOW,
                     resources=["*"],
-                ),            
+                ),   
+                ## iam.PassRole
+                aws_iam.PolicyStatement(
+                    actions=["iam:*"],
+                    effect=aws_iam.Effect.ALLOW,
+                    resources=["*"],
+                ),                          
             ],
         )
         return cfn_repo_step
