@@ -89,7 +89,7 @@ class CfnPipelineStack(Stack):
                                 "cfn_001_to_be_replaced/vars_dev.json"
                             ),
                             run_order=1,
-                            role=self.cfn_deploy_role
+                            #role=self.cfn_deploy_role
                             # cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
                             # cfn_capabilities=[CfnCapabilities.NAMED_IAM]
                             # cfn_capabilities=cfn_capabilities
