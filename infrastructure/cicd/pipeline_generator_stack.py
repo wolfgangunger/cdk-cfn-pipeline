@@ -21,7 +21,7 @@ class PipelineGeneratorApplicationBootstrap(Stage):
         self,
         scope: Construct,
         id: str,
-        pipeline_template: str,
+        account_role_arn,
         config: dict = None,
         **kwargs,
     ):
@@ -31,6 +31,7 @@ class PipelineGeneratorApplicationBootstrap(Stage):
         CfnPipelineStack(
             self,
             "cfn-pipeline-template",
+            account_role_arn,
             config={**config},
             synthesizer=DefaultStackSynthesizer(),
         )
@@ -116,7 +117,7 @@ class PipelineGeneratorStack(Stack):
         pipeline_generator_bootstrap_stage = PipelineGeneratorApplicationBootstrap(
             self,
             "pipeline-generator-bootstrap-stage",
-            pipeline_template=pipeline_template,
+            account_role_arn=synth_dev_account_role_arn,
             config=config,
             env={
                 "account": toolchain_account,

@@ -16,6 +16,7 @@ class CfnPipelineStack(Stack):
         self,
         scope: Construct,
         id: str,
+        account_role_arn,
         config: dict = None,
         **kwargs,
     ):
@@ -39,17 +40,17 @@ class CfnPipelineStack(Stack):
             connection_arn=connection_arn
         )
         ##
-        # self.kms_policy_document = iam.PolicyDocument(
-        #     statements=[
-        #         iam.PolicyStatement(
-        #             actions=[
-        #                 "kms:*"
-        #             ],
-        #             effect=iam.Effect.ALLOW,
-        #             resources=["*"],
-        #         )
-        #     ]
-        # )
+        self.cfn_policy_document = iam.PolicyDocument(
+            statements=[
+                 iam.PolicyStatement(
+                    actions=["sts:AssumeRole"],
+                    effect=iam.Effect.ALLOW,
+                    resources=[
+                        account_role_arn,
+                    ],
+                ),
+            ]
+        )
 
         self.cfn_deploy_role = iam.Role(
             self,
@@ -60,11 +61,11 @@ class CfnPipelineStack(Stack):
             managed_policies=[
                 iam.ManagedPolicy.from_aws_managed_policy_name(
                     'AWSCloudFormationFullAccess'),
-                iam.ManagedPolicy.from_aws_managed_policy_name(
-                    'AmazonSSMFullAccess')
+                #iam.ManagedPolicy.from_aws_managed_policy_name(
+                #    'AmazonSSMFullAccess')
             ],
-            # inline_policies={"KMSPolicyDocument": self.kms_policy_document,
-            #                  "RolePolicyDocument": self.role_policy}
+            inline_policies={"CFNPolicyDocument": self.cfn_policy_document}
+                              
         )
         ##
         pipeline = codepipeline.Pipeline(self, "CFN-Pipeline", pipeline_name = id,
