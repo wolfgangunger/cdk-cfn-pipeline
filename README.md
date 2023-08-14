@@ -15,6 +15,8 @@ note, that you have to deploy the generator pipeline in dev, qa and prod for exa
 
 to be able to use this pipeline, your cloudformation repo must follow a convention on naming folders, templates and parameter json files, see below  
 
+
+
 ## project strucure
   
 README  
@@ -89,6 +91,13 @@ cfn_001_simple_user
 to deploy the cloudformation templates, trigger the pipeline for this stack after updating  
 
 you will see as many pipelines as you have subfolders (cfn_[foldername]) with templates in your cfn-repo  
+
+if you want to delete a cloudformation template and its folder from the repo, please notice,    
+you have to manually delete the stack in cloudformation before deleting the folder or the pipeline ( which will happen when you delelte the folder).     
+the pipeline cannot delete it, since it includes only one stack, which is mandatory.    
+delete the stack on the web-console and afterwards delete the folder and let the generator pipeline delete the stack pipeline .
+Once the pipeline is delete, the role for the cfn deployment will be also deleted and this might cause problems, when you try to delete the stack ( if 
+so, you must manually create a role with the name in the stack properties with the same name to be able to delete the stack)  
 
 
 
