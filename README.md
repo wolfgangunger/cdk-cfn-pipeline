@@ -55,7 +55,7 @@ cdk deploy  cfn-deploy--pipeline-generator
 
 when the pipeline-generator pipelines runs it will create first a template-pipeline for cloudformation deployments ( not runnable due to params in stage)  
 and then create n pipelines for each cloudformation template in the cfn-repo, which will look like this:  
-![image](https://github.com/wolfgangunger/cdk-cfn-pipeline/blob/main/feature-pipeline-cfn.jpg)
+![image](https://github.com/wolfgangunger/cdk-cfn-pipeline/blob/main/pipeline-cfn2.jpg)
 
 to deploy the cloudformation templates trigger the pipeline for this stack after updating  
 
