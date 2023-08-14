@@ -6,7 +6,7 @@ from aws_cdk import (
 )
 
 from infrastructure.cicd.pipeline_generator_stack import PipelineGeneratorStack
-#from generic.infrastructure.iam.bootstrap_role_stack import BootstrapRoleStack
+from infrastructure.iam.bootstrap_role_stack import BootstrapRoleStack
 
 app = App()
 
@@ -19,18 +19,17 @@ qa_account: str = accounts["qa"]["account"]
 prod_account: str = accounts["prod"]["account"]
 
 
-### Bootstrap Role Stacks only to run in the first time. Comment out after creation
-# iam role for pipeline deploy dev enviroment stacks
-# BootstrapRoleStack(
-#     app,
-#     "bootstrap-dev-role-stack",
-#     account="dev",
-#     toolchain_account=accounts.get("tooling").get("account"),
-#     env={
-#         "account": dev_account,
-#         "region": region,
-#     },
-# )
+# iam role for pipeline deploy 
+BootstrapRoleStack(
+    app,
+    "bootstrap-dev-role-stack",
+    account="dev",
+    toolchain_account=accounts.get("tooling").get("account"),
+    env={
+        "account": dev_account,
+        "region": region,
+    },
+)
 
 
 config = app.node.try_get_context("config")

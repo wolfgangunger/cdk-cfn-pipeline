@@ -11,7 +11,6 @@ class CfnPipelineStack(Stack):
         self,
         scope: Construct,
         id: str,
-        account_role_arn,
         config: dict = None,
         **kwargs,
     ):
@@ -20,10 +19,6 @@ class CfnPipelineStack(Stack):
         repo_cfn = config.get("repo_cfn")
         connection_arn = config.get("connection_arn")
         source_output = codepipeline.Artifact("SourceArtifact")
-        stack_name = "template-005"
-        ## todo
-        template = ""
-        stage = ""
 
         source_action = cpactions.CodeStarConnectionsSourceAction(
             action_name="Github_Source",
@@ -42,8 +37,6 @@ class CfnPipelineStack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name(
                     "AWSCloudFormationFullAccess"
                 )
-            #     iam.ManagedPolicy.from_aws_managed_policy_name(
-            #         'AdministratorAccess')
             ]
         )
         ##
@@ -58,7 +51,7 @@ class CfnPipelineStack(Stack):
                     actions=[
                         cpactions.CloudFormationCreateUpdateStackAction(
                             action_name="Deploy_CFN_Template",
-                            stack_name=stack_name,
+                            stack_name="template-00x",
                             admin_permissions=True,
                             template_path=source_output.at_path(
                                 "cfn_00x_to_be_replaced/template.yaml"
