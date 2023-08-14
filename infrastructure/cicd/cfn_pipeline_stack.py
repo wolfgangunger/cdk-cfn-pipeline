@@ -72,7 +72,7 @@ class CfnPipelineStack(Stack):
             self,
             "CFN-Pipeline",
             pipeline_name=id,
-            role=self.cfn_deploy_role,
+            #role=self.cfn_deploy_role,
             stages=[
                 codepipeline.StageProps(stage_name="Source", actions=[source_action]),
                 codepipeline.StageProps(
