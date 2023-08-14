@@ -23,12 +23,7 @@ infrastructure ( project specific cdk classes and constructs)
  
 
 ## architecture
-![image](https://github.com/wolfgangunger/cdk-codepipeline-multibranch/blob/main/feature-pipeline.jpg)
-The project contains object orientated cdk design  
-therefor cdk constructs are either in   
-generic/infrastructure (reusable generic classes)  
-or  
-infrastructure (project specific classes)  
+![image](https://github.com/wolfgangunger/cdk-cfn-pipeline/blob/main/feature-pipeline-cfn.jpg)
 
 
 ## setup project
@@ -45,9 +40,7 @@ connect the repo for this pipeline and also the repo for the cloud formation tem
 adapt the cdk.json for your accounts, also codestar connection url
 adapt repo  names etc
 
-### deploy the roles to the stage accounts
-deploy the 3 roles to dev, qa and prod
-for example with : cdk-deploy bootstrap-qa-role-stack
+
 #### bootstrap
 bootstrap the toolchain & stage accounts
 with toolchain credentials
@@ -57,38 +50,15 @@ cdk bootstrap   --cloudformation-execution-policies arn:aws:iam::aws:policy/Admi
 
 
 ### deploy the pipeline via cli    
-cdk deploy  cdk-pipeline-multi-branch
+cdk deploy  cfn-deploy--pipeline-generator
   
-now the pipeline should be ready and will be triggered on any push to the repo  
 
-### deploy the feature-branch-pipeline-generator via cli    
-cdk deploy feature-branch-pipeline-generator
-Edit the secret github_webhook_secret to keep a structure like this:
-{"SecretString" : "xxxxx"}
+when the pipeline-generator pipelines runs it will create first a template-pipeline for cloudformation deployments ( not runnable due to params in stage)  
+and then create n pipelines for each cloudformation template in the cfn-repo, which will look like this:  
+![image](https://github.com/wolfgangunger/cdk-cfn-pipeline/blob/main/feature-pipeline-cfn.jpg)
 
-### edit github-actions-demo.yml
-edit the webhook_url to your api gateway url ( or custom domain)  
-change action triggers if needed   
+to deploy the cloudformation templates trigger the pipeline for this stack after updating  
 
-### create branch and push to see the new feature pipeline gets generated
-create a new branch  
-git checkout -b feature/branch1  
-and push to your repo  
-the pipeline will be generated
-
-### create PR and merge 
-the pipeline will be destroyed  
-
-## tests
-### infrastructure tests
-pytest -vvvv -s generic/infrastructure/tests
-pytest -vvvv -s infrastructure/tests
-### lambda tests 
-pytest -vvvv -s infrastructure/lambdas/tests
-### integration tests
-only dummy tests in this example 
-### acceptance tests
-only dummy tests in this example 
 
 
 

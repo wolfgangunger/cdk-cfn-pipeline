@@ -1,0 +1,91 @@
+<mxfile modified="2023-08-14T14:52:19.281Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="Ip9YhWQbiSWFE97SFYSJ" version="21.6.6" type="device">
+  <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
+    <mxGraphModel dx="1434" dy="750" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="UEzPUAAOIrF-is8g5C7q-74" value="AWS Cloud" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;labelBackgroundColor=#ffffff;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;" parent="1" vertex="1">
+          <mxGeometry x="230" y="80" width="780" height="650" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-5" value="Pipeline Generator" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.codepipeline;fillColor=#759C3E;gradientColor=none;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="300" y="90" width="67.5" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-6" value="CFN Template Pipeline" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.codepipeline;fillColor=#759C3E;gradientColor=none;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="300" y="253" width="67.5" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="UEzPUAAOIrF-is8g5C7q-74" source="ylUKER3mSCWB3Y8iSunq-5" target="ylUKER3mSCWB3Y8iSunq-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="330" as="sourcePoint" />
+            <mxPoint x="380" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-8" value="n CFN Pipelines" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.codepipeline;fillColor=#759C3E;gradientColor=none;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="300" y="380" width="67.5" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-9" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="UEzPUAAOIrF-is8g5C7q-74" source="ylUKER3mSCWB3Y8iSunq-6" target="ylUKER3mSCWB3Y8iSunq-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="344" y="181" as="sourcePoint" />
+            <mxPoint x="344" y="263" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-13" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.lambda_function;fillColor=#F58534;gradientColor=none;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="593.75" y="520" width="69" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-14" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.s3;fillColor=#E05243;gradientColor=none;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="610" y="420" width="76.5" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-15" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="UEzPUAAOIrF-is8g5C7q-74" source="ylUKER3mSCWB3Y8iSunq-8" target="ylUKER3mSCWB3Y8iSunq-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="330" as="sourcePoint" />
+            <mxPoint x="380" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-25" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="UEzPUAAOIrF-is8g5C7q-74" source="ylUKER3mSCWB3Y8iSunq-8" target="ylUKER3mSCWB3Y8iSunq-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="378" y="419" as="sourcePoint" />
+            <mxPoint x="600" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-26" value="Deploys one CFN Template" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="426" y="490" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-27" value="Deploy this pipeline with cdk command" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="410" y="115.5" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-29" value="Creates a template Pipelien for CFN Deployment (not runnable)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="410" y="220" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-30" value="Creates n CFN Deployment Pipelines" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="425" y="360" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-31" value="Resources defined in CFN Templates" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UEzPUAAOIrF-is8g5C7q-74">
+          <mxGeometry x="610" y="350" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-1" value="Git CDK Pipeline" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github" vertex="1" parent="1">
+          <mxGeometry x="45" y="130" width="75" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-2" value="Git CFN Templates" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github" vertex="1" parent="1">
+          <mxGeometry x="45" y="270" width="75" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-10" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;" edge="1" parent="1" source="ylUKER3mSCWB3Y8iSunq-1" target="ylUKER3mSCWB3Y8iSunq-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="410" as="sourcePoint" />
+            <mxPoint x="610" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-11" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;" edge="1" parent="1" source="ylUKER3mSCWB3Y8iSunq-2" target="ylUKER3mSCWB3Y8iSunq-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="181" as="sourcePoint" />
+            <mxPoint x="540" y="217" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ylUKER3mSCWB3Y8iSunq-12" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;" edge="1" parent="1" source="ylUKER3mSCWB3Y8iSunq-2" target="ylUKER3mSCWB3Y8iSunq-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="191" as="sourcePoint" />
+            <mxPoint x="550" y="227" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
