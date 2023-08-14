@@ -8,12 +8,12 @@ for this architecture 2 approaches are possible:
 to create this generator pipeline once in a toolchain account and create all cfn-pipelines for all accounts/stages in there.  
 possible, but this would require cross account roles and setup and complicate this project, make it harder to understand.  
 my multi branch pipeline follows this approach  
-I implemented the 2nd more easy and clear approach.  
+I implemented the 2nd more easy and clear approach for this pipeline.    
 in each account/stage the pipeline generator must be deployed to generate the cfn-templates in the account where the stacks should be deployed.  
 thus no cross account roles are complicating the project, the stage account is considered the same as the toolchain account 
 note, that you have to deploy the generator pipeline in dev, qa and prod for example and adapat the stage name in the cdk.json each time.  
 
-to be able to use this pipeline your cloudformation repo must follow a convention on naming folders, templates and parameter json files, see below  
+to be able to use this pipeline, your cloudformation repo must follow a convention on naming folders, templates and parameter json files, see below  
 
 ## project strucure
   
@@ -76,8 +76,15 @@ the cloudformation repo for which the cfn-pipelines should be generated
 please see my git repo "cfn-for-pipeline" as example :
 structure must be:   
 cfn_[foldername]  
-template.yaml  
-params_[stage].json  
+-template.yaml  
+-params_[stage].json  
+
+example :   
+cfn_001_simple_user  
+-template.yaml  
+-params_dev.json  
+-params_qa.json  
+-params_prod.json  
 
 to deploy the cloudformation templates, trigger the pipeline for this stack after updating  
 

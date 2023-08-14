@@ -14,9 +14,8 @@ ssm_client = boto3.client("ssm")
 codepipeline_client = boto3.client("codepipeline")
 sm_client = boto3.client("secretsmanager")
 
-branch_chars = ""
-branch_name = ""
-stage = "dev"
+stage = os.getenv("stage")
+branch = os.getenv("BRANCH")
 folder_prefix = "cfn_"
 pipeline_template = "cfn-pipeline-template"
 pipeline_name = "cfn-pipeline-"
@@ -59,7 +58,7 @@ def create_cfn_pipeline_from_template( stage, pipeline_template, key):
 
     pipeline_describe["stages"][0]["actions"][0]["configuration"][
         "BranchName"
-    ] = "main"
+    ] = branch
 
     pipeline_describe["stages"][1]["actions"][0]["configuration"][
         "StackName"
@@ -84,7 +83,6 @@ if __name__ == "__main__":
 
     print("create pipelines for cfn templates")
     for file_path in os.listdir(dir_path):
-        # check if current file_path is a file
         if not os.path.isfile(os.path.join(dir_path, file_path)):
             if file_path.startswith(folder_prefix):
               vars = open(file_path + "/params_" + stage + ".json")
@@ -94,7 +92,7 @@ if __name__ == "__main__":
 
     for key in templates:
         print(key)
-        # check ssm
+        # check ssm first
         exists = is_folder_name_in_ssm(key)
         if not exists:
           print("create ssm for " + key)
@@ -102,10 +100,9 @@ if __name__ == "__main__":
           #create pipeline
           print("create pipeline for " + key)
           create_cfn_pipeline_from_template(
-            #stage, pipeline_template, pipeline_name + key
             stage, pipeline_template,   key    
           )
-          msg = f"Done feature pipeline generation for: {branch_name}"
+          msg = f"Done feature pipeline generation for: {key}"
         else:
             print ("ssm param already exists: " + key)  
 
@@ -118,7 +115,6 @@ if __name__ == "__main__":
         p_name = response.get("Parameter").get("Name")
         print(p_name)
         if p_name.startswith("cfn"):
-            print("cfn parameter")
             if not p_name in templates:
                 print ("deleting pipeline for " + p_name)
                 delete_cfn_pipeline( p_name)

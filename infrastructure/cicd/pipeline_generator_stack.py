@@ -112,6 +112,7 @@ class PipelineGeneratorStack(Stack):
             git_input,
             synth_step,
             account_role_arn,
+            stage,
             branch_name,
         )
         wave = pipeline.add_wave(
@@ -158,6 +159,7 @@ class PipelineGeneratorStack(Stack):
         git_input,
         synth_step,
         account_role_arn,
+        stage,
         branch_name,
     ):
         cfn_repo_step = pipelines.CodeBuildStep(
@@ -165,7 +167,7 @@ class PipelineGeneratorStack(Stack):
             input=git_input_cfn,
             additional_inputs={"subdir": git_input, "./cdk_input": synth_step},
             commands=self.create_cfn_pipelines_step_commands(),
-            env={"BRANCH": branch_name},
+            env={"BRANCH": branch_name,"stage": stage},
             role_policy_statements=[
                 aws_iam.PolicyStatement(
                     actions=["sts:AssumeRole"],
