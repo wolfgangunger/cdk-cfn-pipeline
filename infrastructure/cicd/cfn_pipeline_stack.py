@@ -81,7 +81,14 @@ class CfnPipelineStack(Stack):
         action_role = iam.Role(self, "ActionRole",
             assumed_by=iam.AccountPrincipal("039735417706"),
             # the role has to have a physical name set
-            role_name=PhysicalName.GENERATE_IF_NEEDED
+            role_name=PhysicalName.GENERATE_IF_NEEDED,
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(
+                    "AWSCloudFormationFullAccess"
+                ),
+                iam.ManagedPolicy.from_aws_managed_policy_name(
+                    'AdministratorAccess')
+            ],
         )
         ##
         pipeline = codepipeline.Pipeline(
