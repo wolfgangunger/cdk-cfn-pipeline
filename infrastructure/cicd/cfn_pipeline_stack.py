@@ -28,6 +28,7 @@ class CfnPipelineStack(Stack):
             owner=repo_owner,
             repo=repo_cfn,
             branch=branch_name_cfn,
+            trigger_on_push=False,
             output=source_output,
             connection_arn=connection_arn,
         )
