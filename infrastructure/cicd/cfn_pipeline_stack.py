@@ -33,43 +33,7 @@ class CfnPipelineStack(Stack):
             output=source_output,
             connection_arn=connection_arn,
         )
-        ##
-        # self.cfn_policy_document = iam.PolicyDocument(
-        #     statements=[
-        #         iam.PolicyStatement(
-        #             actions=["sts:AssumeRole"],
-        #             effect=iam.Effect.ALLOW,
-        #             principals=[iam.ServicePrincipal("cloudformation.amazonaws.com")],
-        #             #resources=[
-        #             #    "*"
-        #             #],
-        #         ),
-        #          iam.PolicyStatement(
-        #             actions=["sts:AssumeRole"],
-        #             effect=iam.Effect.ALLOW,
-        #             principals=[iam.ServicePrincipal("codepipeline")],
-        #             #resources=[
-        #             #    "*"
-        #             #],
-        #         ),               
-        #     ]
-        # )
 
-        # self.cfn_deploy_role = iam.Role(
-        #     self,
-        #     id="cfn-deploy-role",
-        #     assumed_by=iam.ServicePrincipal("cloudformation.amazonaws.com"),
-        #     role_name=f"{id}-cfn-deploy-role",
-        #     description="Allows CloudFormation Deployment",
-        #     managed_policies=[
-        #         iam.ManagedPolicy.from_aws_managed_policy_name(
-        #             "AWSCloudFormationFullAccess"
-        #         ),
-        #         iam.ManagedPolicy.from_aws_managed_policy_name(
-        #             'AdministratorAccess')
-        #     ],
-        # )
-        ##
         action_role = iam.Role(self, "ActionRole",
             assumed_by=iam.AccountPrincipal("039735417706"),
             # the role has to have a physical name set
@@ -78,9 +42,9 @@ class CfnPipelineStack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name(
                     "AWSCloudFormationFullAccess"
                 ),
-                iam.ManagedPolicy.from_aws_managed_policy_name(
-                    'AdministratorAccess')
-            ],
+            #     iam.ManagedPolicy.from_aws_managed_policy_name(
+            #         'AdministratorAccess')
+            # ],
         )
         ##
         pipeline = codepipeline.Pipeline(
