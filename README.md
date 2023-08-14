@@ -1,7 +1,7 @@
 
 
-# cdk-codepipeline
-cdk project with codepipeline to generate pipelines for cloud formation templates
+# cloudformation-deployment-codepipeline
+cdk project with codepipeline to generate pipelines for cloud formation templates  
 it will create a pipeline generator pipeline which will create one pipeline for each cloudformation template in the cfn-repo  
 for this architecture 2 approaches are possible:  
 to create this generator pipeline once in a toolchain account and create all cfn-pipelines for all accounts/stages in there.  
@@ -23,7 +23,7 @@ infrastructure ( project specific cdk classes and constructs)
  
 
 ## architecture
-![image](https://github.com/wolfgangunger/cdk-cfn-pipeline/blob/main/feature-pipeline-cfn.jpg)
+![image](https://github.com/wolfgangunger/cdk-cfn-pipeline/blob/main/pipeline-cfn.jpg)
 
 
 ## setup project

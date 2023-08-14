@@ -67,7 +67,7 @@ def create_cfn_pipeline_from_template( stage, pipeline_template, key):
     
     pipeline_describe["stages"][1]["actions"][0]["configuration"][
         "TemplateConfiguration"
-    ] =  "SourceArtifact::" + key + "/vars_" + stage + ".json"
+    ] =  "SourceArtifact::" + key + "/params_" + stage + ".json"
      
     pipeline_describe["stages"][1]["actions"][0]["configuration"][
         "TemplatePath"
