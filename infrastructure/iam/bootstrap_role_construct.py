@@ -10,14 +10,15 @@ class BootstrapRole(Construct):
         scope: Construct,
         id: str,
         toolchain_account: str,
+        stage: str,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.role = aws_iam.Role(
             self,
-            id="codebuild-role-from-toolchain-account",
-            role_name="codebuild-role-from-toolchain-account",
+            id=f"codebuild-role-from-toolchain-account-{stage}",
+            role_name=f"codebuild-role-from-toolchain-account-{stage}",
             assumed_by=aws_iam.AccountPrincipal(f"{toolchain_account}"),
             description="Role to grant access to stage accounts",
             ### TODO: Change to restricted policy

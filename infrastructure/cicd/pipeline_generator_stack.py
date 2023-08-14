@@ -42,6 +42,7 @@ class PipelineGeneratorStack(Stack):
         id: str,
         branch_name: str,
         branch_name_cfn: str,
+        stage: str,
         config: dict = None,
         **kwargs,
     ):
@@ -52,7 +53,7 @@ class PipelineGeneratorStack(Stack):
         region: str = accounts["tooling"]["region"]
 
         account_role_arn = (
-            f"arn:aws:iam::{account}:role/codebuild-role-from-toolchain-account"
+            f"arn:aws:iam::{account}:role/codebuild-role-from-toolchain-account-{stage}"
         )
 
         codestar_connection_arn = config.get("connection_arn")
@@ -83,7 +84,7 @@ class PipelineGeneratorStack(Stack):
         pipeline = CodePipeline(
             self,
             id,
-            pipeline_name=id,
+            pipeline_name=f"{id}-{stage}",
             synth=synth_step,
             cross_account_keys=True,
             code_build_defaults=pipelines.CodeBuildOptions(

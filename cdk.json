@@ -35,6 +35,7 @@
           "region": "eu-west-2"
         }
       },
+      "stage" : "dev",
       "branch": "main",
       "branch_cfn": "main",
       "owner": "wolfgangunger",

@@ -11,13 +11,14 @@ class BootstrapRoleStack(Stack):
         scope: Construct,
         id: str,
         toolchain_account: str,
-        account: str,
+        stage: str,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
         BootstrapRole(
             self,
-            f"{account}-role",
+            f"{stage}-role",
             toolchain_account,
+            stage
         )
