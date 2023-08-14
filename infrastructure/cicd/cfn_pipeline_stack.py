@@ -21,7 +21,7 @@ class CfnPipelineStack(Stack):
         connection_arn = config.get("connection_arn")
         source_output = codepipeline.Artifact("SourceArtifact")
         accounts = config.get("accounts")
-        account = accounts.get("tooling")
+        account: str = accounts["tooling"]["account"]
 
         source_action = cpactions.CodeStarConnectionsSourceAction(
             action_name="Github_Source",

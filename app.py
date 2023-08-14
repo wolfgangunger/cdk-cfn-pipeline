@@ -17,7 +17,7 @@ region: str = accounts["tooling"]["region"]
 account: str = accounts["tooling"]["account"]
 stage = config.get("stage")
 
-# iam role for pipeline deploy 
+# iam role for pipeline  
 BootstrapRoleStack(
     app,
     "bootstrap-role-stack",
@@ -32,6 +32,7 @@ BootstrapRoleStack(
 branch_name = config.get("branch")
 branch_name_cfn = config.get("branch_cfn")
 
+# the pipeline generator pipeline
 PipelineGeneratorStack(
     app,
     "cfn-deploy--pipeline-generator",
