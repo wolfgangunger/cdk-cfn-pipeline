@@ -14,7 +14,6 @@ ssm_client = boto3.client("ssm")
 codepipeline_client = boto3.client("codepipeline")
 sm_client = boto3.client("secretsmanager")
 
-#feature_pipeline_suffix = os.getenv("feature_pipeline_suffix")
 branch_chars = ""
 branch_name = ""
 stage = "dev"
@@ -88,7 +87,7 @@ if __name__ == "__main__":
         # check if current file_path is a file
         if not os.path.isfile(os.path.join(dir_path, file_path)):
             if file_path.startswith(folder_prefix):
-              vars = open(file_path + "/vars_" + stage + ".json")
+              vars = open(file_path + "/params_" + stage + ".json")
               data = json.load(vars)
               templates[file_path] = data
 

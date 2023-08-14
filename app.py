@@ -31,28 +31,7 @@ BootstrapRoleStack(
         "region": region,
     },
 )
-# iam role for pipeline deploy qa enviroment stacks
-BootstrapRoleStack(
-    app,
-    "bootstrap-qa-role-stack",
-    account="dev",
-    toolchain_account=accounts.get("tooling").get("account"),
-    env={
-        "account": qa_account,
-        "region": region,
-    },
-)
-# iam role for pipeline deploy prod enviroment stacks
-BootstrapRoleStack(
-    app,
-    "bootstrap-prod-role-stack",
-    account="dev",
-    toolchain_account=accounts.get("tooling").get("account"),
-    env={
-        "account": prod_account,
-        "region": region,
-    },
-)
+
 
 config = app.node.try_get_context("config")
 accounts = config.get("accounts")

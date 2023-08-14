@@ -34,49 +34,41 @@ class CfnPipelineStack(Stack):
             connection_arn=connection_arn,
         )
         ##
-        self.cfn_policy_document = iam.PolicyDocument(
-            statements=[
-                iam.PolicyStatement(
-                    actions=["sts:AssumeRole"],
-                    effect=iam.Effect.ALLOW,
-                    principals=[iam.ServicePrincipal("cloudformation.amazonaws.com")],
-                    #resources=[
-                    #    "*"
-                    #],
-                ),
-                 iam.PolicyStatement(
-                    actions=["sts:AssumeRole"],
-                    effect=iam.Effect.ALLOW,
-                    principals=[iam.ServicePrincipal("codepipeline")],
-                    #resources=[
-                    #    "*"
-                    #],
-                ),               
-                #iam.PolicyStatement(
-                #    actions=["*"],
-                #    effect=iam.Effect.ALLOW,
-                #    resources=[
-                #        "*"
-                #    ],
-                #),  
-            ]
-        )
+        # self.cfn_policy_document = iam.PolicyDocument(
+        #     statements=[
+        #         iam.PolicyStatement(
+        #             actions=["sts:AssumeRole"],
+        #             effect=iam.Effect.ALLOW,
+        #             principals=[iam.ServicePrincipal("cloudformation.amazonaws.com")],
+        #             #resources=[
+        #             #    "*"
+        #             #],
+        #         ),
+        #          iam.PolicyStatement(
+        #             actions=["sts:AssumeRole"],
+        #             effect=iam.Effect.ALLOW,
+        #             principals=[iam.ServicePrincipal("codepipeline")],
+        #             #resources=[
+        #             #    "*"
+        #             #],
+        #         ),               
+        #     ]
+        # )
 
-        self.cfn_deploy_role = iam.Role(
-            self,
-            id="cfn-deploy-role",
-            assumed_by=iam.ServicePrincipal("cloudformation.amazonaws.com"),
-            role_name=f"{id}-cfn-deploy-role",
-            description="Allows CloudFormation Deployment",
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name(
-                    "AWSCloudFormationFullAccess"
-                ),
-                iam.ManagedPolicy.from_aws_managed_policy_name(
-                    'AdministratorAccess')
-            ],
-            #inline_policies={"CFNPolicyDocument": self.cfn_policy_document},
-        )
+        # self.cfn_deploy_role = iam.Role(
+        #     self,
+        #     id="cfn-deploy-role",
+        #     assumed_by=iam.ServicePrincipal("cloudformation.amazonaws.com"),
+        #     role_name=f"{id}-cfn-deploy-role",
+        #     description="Allows CloudFormation Deployment",
+        #     managed_policies=[
+        #         iam.ManagedPolicy.from_aws_managed_policy_name(
+        #             "AWSCloudFormationFullAccess"
+        #         ),
+        #         iam.ManagedPolicy.from_aws_managed_policy_name(
+        #             'AdministratorAccess')
+        #     ],
+        # )
         ##
         action_role = iam.Role(self, "ActionRole",
             assumed_by=iam.AccountPrincipal("039735417706"),
@@ -95,7 +87,6 @@ class CfnPipelineStack(Stack):
             self,
             "CFN-Pipeline",
             pipeline_name=id,
-            #role=self.cfn_deploy_role,
             stages=[
                 codepipeline.StageProps(stage_name="Source", actions=[source_action]),
                 codepipeline.StageProps(
@@ -106,17 +97,13 @@ class CfnPipelineStack(Stack):
                             stack_name=stack_name,
                             admin_permissions=True,
                             template_path=source_output.at_path(
-                                "cfn_001_to_be_replaced/template.yaml"
+                                "cfn_00x_to_be_replaced/template.yaml"
                             ),
                             template_configuration=source_output.at_path(
-                                "cfn_001_to_be_replaced/vars_dev.json"
+                                "cfn_00x_to_be_replaced/params_dev.json"
                             ),
                             run_order=1,
-                            #deployment_role=self.cfn_deploy_role
                             role=action_role
-                            # cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
-                            # cfn_capabilities=[CfnCapabilities.NAMED_IAM]
-                            # cfn_capabilities=cfn_capabilities
                         )
                     ],
                 ),
