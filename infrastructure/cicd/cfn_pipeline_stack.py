@@ -3,7 +3,7 @@ from aws_cdk import Stack, aws_iam as iam, pipelines, aws_codebuild, CfnCapabili
 
 import aws_cdk.aws_codepipeline_actions as cpactions
 import aws_cdk.aws_codepipeline as codepipeline
-
+from aws_cdk.aws_codebuild import BuildEnvironment
 
 class CfnPipelineStack(Stack):
     def __init__(
@@ -43,6 +43,14 @@ class CfnPipelineStack(Stack):
                     #    "*"
                     #],
                 ),
+                 iam.PolicyStatement(
+                    actions=["sts:AssumeRole"],
+                    effect=iam.Effect.ALLOW,
+                    principals=[iam.ServicePrincipal("codepipeline")],
+                    #resources=[
+                    #    "*"
+                    #],
+                ),               
                 #iam.PolicyStatement(
                 #    actions=["*"],
                 #    effect=iam.Effect.ALLOW,
@@ -73,7 +81,7 @@ class CfnPipelineStack(Stack):
             self,
             "CFN-Pipeline",
             pipeline_name=id,
-            #role=self.cfn_deploy_role,
+            role=self.cfn_deploy_role,
             stages=[
                 codepipeline.StageProps(stage_name="Source", actions=[source_action]),
                 codepipeline.StageProps(
