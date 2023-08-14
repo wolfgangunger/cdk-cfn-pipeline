@@ -9,7 +9,7 @@ possible, but this would require cross account roles and setup and complicate th
 my multi branch pipeline follows this approach  
 I implemented the 2nd more easy and clear approach.  
 in each account/stage the pipeline generator must be deployed to generate the cfn-templates in the account where the stacks should be deployed.  
-thus no cross account roles are complicating the project 
+thus no cross account roles are complicating the project, the stage account is considered the same as the toolchain account 
 note, that you have to deploy the generator pipeline in dev, qa and prod for example and adapat the stage name in the cdk.json each time.  
 
 

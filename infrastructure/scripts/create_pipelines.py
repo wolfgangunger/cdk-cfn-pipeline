@@ -92,8 +92,6 @@ if __name__ == "__main__":
               templates[file_path] = data
 
 
-    # print(templates)
-    # print("###")
     for key in templates:
         print(key)
         # check ssm

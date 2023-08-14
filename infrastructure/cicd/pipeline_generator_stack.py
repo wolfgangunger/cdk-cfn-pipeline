@@ -6,7 +6,6 @@ from aws_cdk import (
 
 from constructs import Construct
 import aws_cdk.aws_iam as aws_iam
-from aws_cdk import aws_codepipeline as codepipeline
 from aws_cdk import pipelines
 from aws_cdk import aws_codebuild
 from aws_cdk.aws_codebuild import BuildEnvironment
@@ -43,23 +42,18 @@ class PipelineGeneratorStack(Stack):
         id: str,
         branch_name: str,
         branch_name_cfn: str,
-        pipeline_template: str,
         config: dict = None,
         **kwargs,
     ):
         super().__init__(scope, id, **kwargs)
 
         accounts = config.get("accounts")
-        dev_account: str = accounts["dev"]["account"]
-        qa_account: str = accounts["qa"]["account"]
-        toolchain_account: str = accounts["tooling"]["account"]
-        prod_account: str = accounts["prod"]["account"]
+        account: str = accounts["tooling"]["account"]
         region: str = accounts["tooling"]["region"]
 
-        synth_dev_account_role_arn = (
-            f"arn:aws:iam::{dev_account}:role/codebuild-role-from-toolchain-account"
+        account_role_arn = (
+            f"arn:aws:iam::{account}:role/codebuild-role-from-toolchain-account"
         )
-
 
         codestar_connection_arn = config.get("connection_arn")
         repo_owner = config.get("owner")
@@ -82,7 +76,7 @@ class PipelineGeneratorStack(Stack):
         # creating the generator pipline with  synch action
         synth_step = self.get_sync_step(
             git_input,
-            synth_dev_account_role_arn,
+            account_role_arn,
             branch_name,
         )
 
@@ -105,7 +99,7 @@ class PipelineGeneratorStack(Stack):
             "pipeline-generator-bootstrap-stage",
             config=config,
             env={
-                "account": toolchain_account,
+                "account": account,
                 "region": region,
             },
         )
@@ -116,7 +110,7 @@ class PipelineGeneratorStack(Stack):
             git_input_cfn,
             git_input,
             synth_step,
-            synth_dev_account_role_arn,
+            account_role_arn,
             branch_name,
         )
         wave = pipeline.add_wave(
@@ -127,7 +121,7 @@ class PipelineGeneratorStack(Stack):
     def get_sync_step(
         self,
         git_input,
-        synth_dev_account_role_arn,
+        account_role_arn,
         branch_name,
     ):
         synth_step = pipelines.CodeBuildStep(
@@ -140,7 +134,7 @@ class PipelineGeneratorStack(Stack):
                     actions=["sts:AssumeRole"],
                     effect=aws_iam.Effect.ALLOW,
                     resources=[
-                        synth_dev_account_role_arn
+                        account_role_arn
                     ],
                 ),
             ],
@@ -162,7 +156,7 @@ class PipelineGeneratorStack(Stack):
         git_input_cfn,
         git_input,
         synth_step,
-        synth_dev_account_role_arn,
+        account_role_arn,
         branch_name,
     ):
         cfn_repo_step = pipelines.CodeBuildStep(
@@ -176,7 +170,7 @@ class PipelineGeneratorStack(Stack):
                     actions=["sts:AssumeRole"],
                     effect=aws_iam.Effect.ALLOW,
                     resources=[
-                        synth_dev_account_role_arn,
+                        account_role_arn,
                     ],
                 ),
                 aws_iam.PolicyStatement(

@@ -14,36 +14,29 @@ app = App()
 config = app.node.try_get_context("config")
 accounts = config.get("accounts")
 region: str = accounts["tooling"]["region"]
-dev_account: str = accounts["dev"]["account"]
-qa_account: str = accounts["qa"]["account"]
-prod_account: str = accounts["prod"]["account"]
+account: str = accounts["tooling"]["account"]
 
 
 # iam role for pipeline deploy 
 BootstrapRoleStack(
     app,
-    "bootstrap-dev-role-stack",
+    "bootstrap-role-stack",
     account="dev",
-    toolchain_account=accounts.get("tooling").get("account"),
+    toolchain_account=account,
     env={
-        "account": dev_account,
+        "account": account,
         "region": region,
     },
 )
 
+branch_name = config.get("branch")
+branch_name_cfn = config.get("branch_cfn")
 
-config = app.node.try_get_context("config")
-accounts = config.get("accounts")
-
-branch_name = "main"
-branch_name_cfn = "main"
-pipeline_template = "cfn-deploy-pipeline-template"
 PipelineGeneratorStack(
     app,
     "cfn-deploy--pipeline-generator",
     branch_name=branch_name,
     branch_name_cfn=branch_name_cfn,
-    pipeline_template=pipeline_template,
     env=accounts.get("tooling"),
     config={**config},
 )

@@ -17,21 +17,23 @@ class CfnPipelineStack(Stack):
         super().__init__(scope, id, stack_name=id, **kwargs)
         repo_owner = config.get("owner")
         repo_cfn = config.get("repo_cfn")
+        branch_name_cfn = config.get("branch_cfn")
         connection_arn = config.get("connection_arn")
         source_output = codepipeline.Artifact("SourceArtifact")
+        accounts = config.get("accounts")
+        account = accounts.get("tooling")
 
         source_action = cpactions.CodeStarConnectionsSourceAction(
             action_name="Github_Source",
             owner=repo_owner,
             repo=repo_cfn,
-            branch="main",
+            branch=branch_name_cfn,
             output=source_output,
             connection_arn=connection_arn,
         )
 
         action_role = iam.Role(self, "ActionRole",
-            assumed_by=iam.AccountPrincipal("039735417706"),
-            # the role has to have a physical name set
+            assumed_by=iam.AccountPrincipal(account),
             role_name=PhysicalName.GENERATE_IF_NEEDED,
             managed_policies=[
                 iam.ManagedPolicy.from_aws_managed_policy_name(
@@ -39,7 +41,7 @@ class CfnPipelineStack(Stack):
                 )
             ]
         )
-        ##
+        
         pipeline = codepipeline.Pipeline(
             self,
             "CFN-Pipeline",

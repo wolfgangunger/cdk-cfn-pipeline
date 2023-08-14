@@ -32,23 +32,11 @@
       "accounts": {
         "tooling": {
           "account": "039735417706",
-          "region": "eu-central-1"
-        },
-        "dev": {
-          "account": "039735417706",
-          "region": "eu-eu-central-1"
-        },
-        "qa": {
-          "account": "039735417706",
-          "region": "eu-central-1"
-        },
-        "prod": {
-          "account": "039735417706",
-          "region": "eu-central-1"
+          "region": "eu-west-2"
         }
       },
-      "development_branch": "main",
-      "production_branch": "main",
+      "branch": "main",
+      "branch_cfn": "main",
       "owner": "wolfgangunger",
       "repo": "cdk-cfn-pipeline",
       "repo_cfn": "cfn-for-pipeline",
