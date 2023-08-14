@@ -4,6 +4,7 @@ from aws_cdk import Stack, aws_iam as iam, pipelines, aws_codebuild, CfnCapabili
 import aws_cdk.aws_codepipeline_actions as cpactions
 import aws_cdk.aws_codepipeline as codepipeline
 from aws_cdk.aws_codebuild import BuildEnvironment
+from aws_cdk import PhysicalName
 
 class CfnPipelineStack(Stack):
     def __init__(
@@ -77,11 +78,17 @@ class CfnPipelineStack(Stack):
             #inline_policies={"CFNPolicyDocument": self.cfn_policy_document},
         )
         ##
+        action_role = iam.Role(self, "ActionRole",
+            assumed_by=iam.AccountPrincipal("039735417706"),
+            # the role has to have a physical name set
+            role_name=PhysicalName.GENERATE_IF_NEEDED
+        )
+        ##
         pipeline = codepipeline.Pipeline(
             self,
             "CFN-Pipeline",
             pipeline_name=id,
-            role=self.cfn_deploy_role,
+            #role=self.cfn_deploy_role,
             stages=[
                 codepipeline.StageProps(stage_name="Source", actions=[source_action]),
                 codepipeline.StageProps(
@@ -98,7 +105,8 @@ class CfnPipelineStack(Stack):
                                 "cfn_001_to_be_replaced/vars_dev.json"
                             ),
                             run_order=1,
-                            deployment_role=self.cfn_deploy_role
+                            #deployment_role=self.cfn_deploy_role
+                            role=action_role
                             # cfn_capabilities=["CAPABILITY_IAM","CAPABILITY_NAMED_IAM"]
                             # cfn_capabilities=[CfnCapabilities.NAMED_IAM]
                             # cfn_capabilities=cfn_capabilities
