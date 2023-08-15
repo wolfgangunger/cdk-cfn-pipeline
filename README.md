@@ -2,6 +2,10 @@
 
 # cloudformation-deployment-codepipeline
 cdk project with codepipeline to generate pipelines for cloudformation templates deployment    
+
+additional infos on my blog :
+[a link](https://www.sccbrasil.com/blog/aws/cdk-pipeline.html)
+
   
 it will create a pipeline generator pipeline which will create one pipeline for each cloudformation template in the cfn-repo  
 for this architecture 2 approaches are possible:  
@@ -75,7 +79,9 @@ the pipeline generator pipeline got 2 input sources:
 the cdk pipeline itself
 the cloudformation repo for which the cfn-pipelines should be generated 
 
-please see my git repo "cfn-for-pipeline" as example :
+please see my git repo 
+[a link](https://github.com/wolfgangunger/cfn-for-pipeline)
+ as example :
 structure must be:   
 cfn_[foldername]  
 -template.yaml  
@@ -94,8 +100,10 @@ you will see as many pipelines as you have subfolders (cfn_[foldername]) with te
 
 if you want to delete a cloudformation template and its folder from the repo, please notice,    
 you have to manually delete the stack in cloudformation before deleting the folder or the pipeline ( which will happen when you delelte the folder).     
-the pipeline cannot delete it, since it includes only one stack, which is mandatory.    
-delete the stack on the web-console and afterwards delete the folder and let the generator pipeline delete the stack pipeline .
+the pipeline cannot delete it, since it includes only one stack, which is mandatory.   
+I could have included the Stack deletion in the Python Script, but in there is no chance for a Manual Approval step, this would be risky.
+CFN Stacks should be deleted only after a Manual Approval and not automatic.  
+Delete the stack on the web-console, if you are sure about this and afterwards delete the folder and let the generator pipeline delete the stack pipeline .
 Once the pipeline is delete, the role for the cfn deployment will be also deleted and this might cause problems, when you try to delete the stack ( if 
 so, you must manually create a role with the name in the stack properties with the same name to be able to delete the stack)  
 
