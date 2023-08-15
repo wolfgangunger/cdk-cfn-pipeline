@@ -4,7 +4,7 @@
 cdk project with codepipeline to generate pipelines for cloudformation templates deployment    
 
 additional infos on my blog :
-[a link](https://www.sccbrasil.com/blog/aws/cdk-pipeline.html)
+[Blog Wolfgang Unger CFN-Pipline](https://www.sccbrasil.com/blog/aws/cdk-pipeline.html)
 
   
 it will create a pipeline generator pipeline which will create one pipeline for each cloudformation template in the cfn-repo  
@@ -80,7 +80,7 @@ the cdk pipeline itself
 the cloudformation repo for which the cfn-pipelines should be generated 
 
 please see my git repo 
-[a link](https://github.com/wolfgangunger/cfn-for-pipeline)
+[Repo CFN-Example](https://github.com/wolfgangunger/cfn-for-pipeline)
  as example :
 structure must be:   
 cfn_[foldername]  
