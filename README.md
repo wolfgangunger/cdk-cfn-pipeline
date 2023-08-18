@@ -53,7 +53,7 @@ adapt repo names etc
 bootstrap the toolchain & stage accounts
 with toolchain credentials
 cdk bootstrap   --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess  aws://12345678912/us-east-1
-cdk bootstrap   --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess  aws://039735417706/eu-west-2
+cdk bootstrap   --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess  aws://039735417706/eu-west-3
 
 ### cdk commands to test syntax of project and cdk.json values 
 cdk ls  

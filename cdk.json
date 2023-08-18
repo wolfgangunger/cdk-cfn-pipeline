@@ -31,8 +31,8 @@
     "config": {
       "accounts": {
         "tooling": {
-          "account": "xxxx",
-          "region": "eu-west-2"
+          "account": "039735417706",
+          "region": "eu-west-3"
         }
       },
       "stage" : "dev",
@@ -41,7 +41,7 @@
       "owner": "wolfgangunger",
       "repo": "cdk-cfn-pipeline",
       "repo_cfn": "cfn-for-pipeline",
-      "connection_arn": "arn:aws:codestar-connections:eu-central-1:xxx:connection/xxx"
+      "connection_arn": "arn:aws:codestar-connections:eu-central-1:039735417706:connection/872747e0-e670-4a73-92e5-c56a594d9ac1"
     }
   }
 }
